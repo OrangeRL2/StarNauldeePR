@@ -1,7 +1,7 @@
 #include "MathFunc.h"
 #include <stdlib.h>
-
-//ƒC[ƒWƒ“ƒO
+#pragma warning(disable:4828) 
+//ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°
 float MathFunc::easeOutQuint(float number) {
 	return 1 - pow(1 - number, 5);
 }
@@ -11,10 +11,13 @@ float MathFunc::easeInQuint(float number) {
 float MathFunc::easeInOutSine(float number) {
 	return -(cos(Pie * number) - 1) / 2;
 }
-
-//ƒXƒP[ƒŠƒ“ƒOs—ñ‚ğİ’è‚·‚éŠÖ”
+float MathFunc::DegreeConversionRad(float frequencymethod)
+{
+	return Pie / 180 * frequencymethod;
+}
+//ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°è¡Œåˆ—ã‚’è¨­å®šã™ã‚‹é–¢æ•°
 void MathFunc::Affine::SetMatScale(XMMATRIX& affineMat, DirectX::XMFLOAT3 scale) {
-	//ƒXƒP[ƒŠƒ“ƒOs—ñ‚ğéŒ¾
+	//ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°è¡Œåˆ—ã‚’å®£è¨€
 	XMMATRIX matScale = {
 		scale.x , 0 , 0 , 0 ,
 		0 , scale.y , 0 , 0 ,
@@ -22,16 +25,16 @@ void MathFunc::Affine::SetMatScale(XMMATRIX& affineMat, DirectX::XMFLOAT3 scale)
 		0 , 0 , 0 , 1 ,
 	};
 
-	//s—ñ‚ÌŒvZ
+	//è¡Œåˆ—ã®è¨ˆç®—
 	affineMat *= matScale;
 
 }
 
-//‰ñ“]s—ñ‚ğİ’è‚·‚éŠÖ”
+//å›è»¢è¡Œåˆ—ã‚’è¨­å®šã™ã‚‹é–¢æ•°
 void MathFunc::Affine::SetMatRotation(XMMATRIX& affineMat, DirectX::XMFLOAT3 rotation) {
 
-	//‰ñ“]s—ñ‚ğéŒ¾
-	//Z²‰ñ“]
+	//å›è»¢è¡Œåˆ—ã‚’å®£è¨€
+	//Zè»¸å›è»¢
 	XMMATRIX matRotZ = {
 		(float)cos(rotation.z) , (float)sin(rotation.z) , 0 , 0 ,
 		(float)-sin(rotation.z) , (float)cos(rotation.z) , 0 , 0 ,
@@ -39,7 +42,7 @@ void MathFunc::Affine::SetMatRotation(XMMATRIX& affineMat, DirectX::XMFLOAT3 rot
 		0 , 0 , 0 , 1 ,
 	};
 
-	//X²‰ñ“]
+	//Xè»¸å›è»¢
 	XMMATRIX matRotX = {
 		1 , 0 , 0 , 0 ,
 		0 , (float)cos(rotation.x) , (float)sin(rotation.x) , 0 ,
@@ -47,7 +50,7 @@ void MathFunc::Affine::SetMatRotation(XMMATRIX& affineMat, DirectX::XMFLOAT3 rot
 		0 , 0 , 0 , 1 ,
 	};
 
-	//Y²‰ñ“]
+	//Yè»¸å›è»¢
 	XMMATRIX matRotY = {
 		(float)cos(rotation.y) , 0 , (float)-sin(rotation.y) , 0 ,
 		0 , 1 , 0 , 0 ,
@@ -55,17 +58,17 @@ void MathFunc::Affine::SetMatRotation(XMMATRIX& affineMat, DirectX::XMFLOAT3 rot
 		0 , 0 , 0 , 1 ,
 	};
 
-	//s—ñ‚ÌŒvZ
+	//è¡Œåˆ—ã®è¨ˆç®—
 	affineMat *= matRotX;
 	affineMat *= matRotY;
 	affineMat *= matRotZ;
 
 }
 
-//•½sˆÚ“®s—ñ‚Ìİ’è‚ğ‚·‚éŠÖ”
+//å¹³è¡Œç§»å‹•è¡Œåˆ—ã®è¨­å®šã‚’ã™ã‚‹é–¢æ•°
 void MathFunc::Affine::SetMatTranslation(XMMATRIX& affineMat, DirectX::XMFLOAT3 translation) {
 
-	//•½sˆÚ“®s—ñ‚ÌéŒ¾
+	//å¹³è¡Œç§»å‹•è¡Œåˆ—ã®å®£è¨€
 	XMMATRIX matTranslation = {
 		1 , 0 , 0 , 0 ,
 		0 , 1 , 0 , 0 ,
@@ -73,16 +76,16 @@ void MathFunc::Affine::SetMatTranslation(XMMATRIX& affineMat, DirectX::XMFLOAT3 
 		translation.x , translation.y , translation.z , 1 ,
 	};
 
-	//s—ñ‚ÌŒvZ
+	//è¡Œåˆ—ã®è¨ˆç®—
 	affineMat *= matTranslation;
 }
 #pragma endregion
 
-#pragma region//ƒ[ƒ‹ƒh•ÏŠ·s—ñ‚ğ¶¬‚·‚éŠÖ”
-//ƒXƒP[ƒŠƒ“ƒOs—ñ‚ğ¶¬‚·‚éŠÖ”
+#pragma region//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›è¡Œåˆ—ã‚’ç”Ÿæˆã™ã‚‹é–¢æ•°
+//ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°è¡Œåˆ—ã‚’ç”Ÿæˆã™ã‚‹é–¢æ•°
 XMMATRIX MathFunc::Affine::CreateMatScale(DirectX::XMFLOAT3 scale) {
 
-	//ƒXƒP[ƒŠƒ“ƒOs—ñ‚ğéŒ¾
+	//ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°è¡Œåˆ—ã‚’å®£è¨€
 	XMMATRIX matScale = {
 		scale.x , 0 , 0 , 0 ,
 		0 , scale.y , 0 , 0 ,
@@ -90,18 +93,18 @@ XMMATRIX MathFunc::Affine::CreateMatScale(DirectX::XMFLOAT3 scale) {
 		0 , 0 , 0 , 1 ,
 	};
 
-	//s—ñ‚ÌŒvZ
+	//è¡Œåˆ—ã®è¨ˆç®—
 	return matScale;
 
 }
 
-//‰ñ“]s—ñ‚ğ¶¬‚·‚éŠÖ”
+//å›è»¢è¡Œåˆ—ã‚’ç”Ÿæˆã™ã‚‹é–¢æ•°
 XMMATRIX MathFunc::Affine::CreateMatRotation(DirectX::XMFLOAT3 rotation) {
 
-	//‰ñ“]s—ñ‚ğéŒ¾
+	//å›è»¢è¡Œåˆ—ã‚’å®£è¨€
 	XMMATRIX matRot;
 
-	//Z²‰ñ“]
+	//Zè»¸å›è»¢
 	XMMATRIX matRotZ = {
 		(float)cos(rotation.z) , (float)sin(rotation.z) , 0 , 0 ,
 		(float)-sin(rotation.z) , (float)cos(rotation.z) , 0 , 0 ,
@@ -109,7 +112,7 @@ XMMATRIX MathFunc::Affine::CreateMatRotation(DirectX::XMFLOAT3 rotation) {
 		0 , 0 , 0 , 1 ,
 	};
 
-	//X²‰ñ“]
+	//Xè»¸å›è»¢
 	XMMATRIX matRotX = {
 		1 , 0 , 0 , 0 ,
 		0 , (float)cos(rotation.x) , (float)sin(rotation.x) , 0 ,
@@ -117,7 +120,7 @@ XMMATRIX MathFunc::Affine::CreateMatRotation(DirectX::XMFLOAT3 rotation) {
 		0 , 0 , 0 , 1 ,
 	};
 
-	//Y²‰ñ“]
+	//Yè»¸å›è»¢
 	XMMATRIX matRotY = {
 		(float)cos(rotation.y) , 0 , (float)-sin(rotation.y) , 0 ,
 		0 , 1 , 0 , 0 ,
@@ -125,7 +128,7 @@ XMMATRIX MathFunc::Affine::CreateMatRotation(DirectX::XMFLOAT3 rotation) {
 		0 , 0 , 0 , 1 ,
 	};
 
-	//s—ñ‚ÌŒvZ
+	//è¡Œåˆ—ã®è¨ˆç®—
 	matRot *= matRotZ;
 	matRot *= matRotX;
 	matRot *= matRotY;
@@ -135,10 +138,10 @@ XMMATRIX MathFunc::Affine::CreateMatRotation(DirectX::XMFLOAT3 rotation) {
 }
 
 
-//•½sˆÚ“®s—ñ‚Ì¶¬‚ğ‚·‚éŠÖ”
+//å¹³è¡Œç§»å‹•è¡Œåˆ—ã®ç”Ÿæˆã‚’ã™ã‚‹é–¢æ•°
 XMMATRIX MathFunc::Affine::CreateMatTranslation(DirectX::XMFLOAT3 translation) {
 
-	//•½sˆÚ“®s—ñ‚ÌéŒ¾
+	//å¹³è¡Œç§»å‹•è¡Œåˆ—ã®å®£è¨€
 	XMMATRIX matTranslation = {
 		1 , 0 , 0 , 0 ,
 		0 , 1 , 0 , 0 ,
@@ -146,14 +149,14 @@ XMMATRIX MathFunc::Affine::CreateMatTranslation(DirectX::XMFLOAT3 translation) {
 		translation.x , translation.y , translation.z , 1 ,
 	};
 
-	//s—ñ‚ÌŒvZ
+	//è¡Œåˆ—ã®è¨ˆç®—
 	return matTranslation;
 }
 
 #pragma endregion
 
 
-//ƒrƒ…[s—ñ‚ğ¶¬‚·‚éŠÖ”
+//ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã‚’ç”Ÿæˆã™ã‚‹é–¢æ•°
 XMMATRIX MathFunc::Utility::CreatMatView(DirectX::XMFLOAT3 eye, DirectX::XMFLOAT3 target, DirectX::XMFLOAT3 up) {
 
 	XMMATRIX matView;
@@ -184,16 +187,16 @@ XMMATRIX MathFunc::Utility::CreatMatView(DirectX::XMFLOAT3 eye, DirectX::XMFLOAT
 
 }
 
-#pragma region//“x”–@ÌŒÊ“x–@‚ÌŠÖ”
+#pragma region//åº¦æ•°æ³•â‡”å¼§åº¦æ³•ã®é–¢æ•°
 
-//“x”–@‚ğŒÊ“x–@‚É•ÏŠ·‚·‚éŠÖ”
+//åº¦æ•°æ³•ã‚’å¼§åº¦æ³•ã«å¤‰æ›ã™ã‚‹é–¢æ•°
 float MathFunc::Utility::Deg2Rad(float Deg) {
 
 	return Deg * MathFunc::Pie / 180;
 
 }
 
-//ŒÊ“x–@‚ğ“x”–@‚É•ÏŠ·‚·‚éŠÖ”
+//å¼§åº¦æ³•ã‚’åº¦æ•°æ³•ã«å¤‰æ›ã™ã‚‹é–¢æ•°
 float MathFunc::Utility::Rad2Deg(float rad) {
 
 	return rad / MathFunc::Pie * 180;

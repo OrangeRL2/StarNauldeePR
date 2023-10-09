@@ -3,120 +3,47 @@
 
 void Collision::SetObject(DirectX::XMFLOAT3 cubePos, DirectX::XMFLOAT3 cubeScale)
 {
-	//ˆø”‚©‚çó‚¯æ‚Á‚½’l‚ğƒƒ“ƒo•Ï”‚É‘ã“ü
 	/*this->cubePos = cubePos;
 	this->cubeScale = cubeScale;*/
 
-	//cubeVertex1‚Ì’l‚ğİ’è
+	//cubeVertex1 setting
 	cubeVertex1.c = cubePos;
-	//Še’¸“_‚ÌÀ•W‚ğİ’è 0<-x-y-z> 1<-xy-z> 2<x-y-z> 3<xy-z> 4<-x-yz> 5<-xyz> 6<x-yz> 7<xyz>
-	/*cubeVertex1.v[0] = { cube1->GetPosition().x - cube1->GetScale().x,cube1->GetPosition().y - cube1->GetScale().y, cube1->GetPosition().z - -cube1->GetScale().z };
-	cubeVertex1.v[1] = { cube1->GetPosition().x - cube1->GetScale().x,cube1->GetPosition().y + cube1->GetScale().y, cube1->GetPosition().z - -cube1->GetScale().z };
-	cubeVertex1.v[2] = { cube1->GetPosition().x + cube1->GetScale().x,cube1->GetPosition().y - cube1->GetScale().y, cube1->GetPosition().z - -cube1->GetScale().z };
-	cubeVertex1.v[3] = { cube1->GetPosition().x + cube1->GetScale().x,cube1->GetPosition().y + cube1->GetScale().y, cube1->GetPosition().z - -cube1->GetScale().z };
-	cubeVertex1.v[4] = { cube1->GetPosition().x - cube1->GetScale().x,cube1->GetPosition().y - cube1->GetScale().y, cube1->GetPosition().z + -cube1->GetScale().z };
-	cubeVertex1.v[5] = { cube1->GetPosition().x - cube1->GetScale().x,cube1->GetPosition().y + cube1->GetScale().y, cube1->GetPosition().z + -cube1->GetScale().z };
-	cubeVertex1.v[6] = { cube1->GetPosition().x + cube1->GetScale().x,cube1->GetPosition().y - cube1->GetScale().y, cube1->GetPosition().z + -cube1->GetScale().z };
-	cubeVertex1.v[7] = { cube1->GetPosition().x + cube1->GetScale().x,cube1->GetPosition().y + cube1->GetScale().y, cube1->GetPosition().z + -cube1->GetScale().z };*/
 
-	//min,max‚Ìİ’è
+	//min,maxã®
 	cubeVertex1.min = { cubePos.x - (cubeScale.x / 2) ,cubePos.y - (cubeScale.y),cubePos.z - (cubeScale.z / 2) };
 	cubeVertex1.max = { cubePos.x + (cubeScale.x / 2) ,cubePos.y + (cubeScale.y),cubePos.z + (cubeScale.z / 2) };
 }
 
 bool Collision::Update(DirectX::XMFLOAT3 spherePos, DirectX::XMFLOAT3 sphereScale)
 {
-	//cubeVertex1‚Ì’l‚ğİ’è
 	/*cubeVertex1.c = cubePos;*/
 
-	//min,max‚Ìİ’è
+	//min,maxã®
 	/*cubeVertex1.min = { cubePos.x - (cubeScale.x * 2) ,cubePos.y - (cubeScale.y * 2),cubePos.z - (cubeScale.z * 2) };
 	cubeVertex1.max = { cubePos.x + (cubeScale.x * 2) ,cubePos.y + (cubeScale.y * 2),cubePos.z + (cubeScale.z * 2) };*/
 	/*cubeVertex1.min = { cubePos.x - (cubeScale.x *1.5f) ,cubePos.y - (cubeScale.y * 1.5f),cubePos.z - (cubeScale.z * 1.5f) };
 	cubeVertex1.max = { cubePos.x + (cubeScale.x *1.5f) ,cubePos.y + (cubeScale.y * 1.5f),cubePos.z + (cubeScale.z * 1.5f) }; */
 
-	//SphereVertex1‚Ì’l‚ğİ’è
+	//SphereVertex1ã®å€¤ã‚’è¨­å®š
 	sphereVertex1.c = spherePos;
 	sphereVertex1.r = sphereScale;
 	sphereVertex1.min = { spherePos.x - (sphereScale.x / 2) ,spherePos.y - (sphereScale.y / 2),spherePos.z - (sphereScale.z / 2) };
 	sphereVertex1.max = { spherePos.x + (sphereScale.x / 2) ,spherePos.y + (sphereScale.y / 2),spherePos.z + (sphereScale.z / 2) };
 
-	//‰~‚Ì’†SÀ•W‚ª’¼•û‘Ì‚Ì”ÍˆÍ“à‚É‚ ‚éê‡‚ÌƒxƒNƒgƒ‹
+
 	DirectX::XMFLOAT3 v{};
-	//ƒtƒ‰ƒO‚ğ—pˆÓ
+	
 	bool xFlag = false;
 	bool yFlag = false;
 	bool zFlag = false;
-	//Še²‚ÌÀ•W‚ª‹éŒ`‚Ì”ÍˆÍ“à‚É‚ ‚éê‡ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+	
 	if (sphereVertex1.max.x >= cubeVertex1.min.x && sphereVertex1.min.x <= cubeVertex1.max.x)xFlag = true;
 	if (sphereVertex1.max.y >= cubeVertex1.min.y && sphereVertex1.min.y <= cubeVertex1.max.y)yFlag = true;
 	if (sphereVertex1.max.z >= cubeVertex1.min.z && sphereVertex1.min.z <= cubeVertex1.max.z)zFlag = true;
 
-	//‘S‚Ä‚ÌÀ•W‚ª”ÍˆÍ“à‚É‚ ‚Á‚½‚ç“–‚½‚è
+	//å…¨ã¦ã®åº§æ¨™ãŒç¯„å›²å†…ã«ã‚ã£ãŸã‚‰å½“ãŸã‚Š
 	if (xFlag == true && yFlag == true && zFlag == true)return 1;
 
-	////x²Ay²‚Ì”ÍˆÍ“à‚ÉÀ•W‚ª‚ ‚éê‡
-	//else if (xFlag == true && yFlag == true)
-	//{
-	//	//À•W‚ªè‘O‚É‚ ‚éê‡
-	//	if (sphereVertex1.c.z < cubeVertex1.min.z)
-	//	{
-	//		v = { 0,0,sphereVertex1.c.z - cubeVertex1.min.z };
-	//	}
-	//	//À•W‰œ‚É‚ ‚éê‡
-	//	if (sphereVertex1.c.z < cubeVertex1.min.z)
-	//	{
-	//		v = { 0,0,sphereVertex1.c.z - cubeVertex1.max.z };
-	//	}
-	//}
-
-	////y²Az²‚Ì”ÍˆÍ“à‚ÉÀ•W‚ª‚ ‚éê‡
-	//else if (yFlag == true && zFlag == true)
-	//{
-	//	//À•W‚ª¶‚É‚ ‚éê‡
-	//	if (sphereVertex1.c.x < cubeVertex1.min.x)
-	//	{
-	//		v = { sphereVertex1.c.x - cubeVertex1.min.x,0,0};
-	//	}
-	//	//À•W‚ª‰E‚É‚ ‚éê‡
-	//	if (sphereVertex1.c.x < cubeVertex1.min.x)
-	//	{
-	//		v = { sphereVertex1.c.x - cubeVertex1.max.x,0,0};
-	//	}
-	//}
-
-	////x²Az²‚Ì”ÍˆÍ“à‚ÉÀ•W‚ª‚ ‚éê‡
-	//else if (xFlag == true && zFlag == true)
-	//{
-	//	//À•W‚ª‰º‚É‚ ‚éê‡
-	//	if (sphereVertex1.c.y < cubeVertex1.min.y)
-	//	{
-	//		v = { 0,sphereVertex1.c.y - cubeVertex1.min.y,0 };
-	//	}
-	//	//À•W‚ª‰E‚É‚ ‚éê‡
-	//	if (sphereVertex1.c.y < cubeVertex1.min.y)
-	//	{
-	//		v = { 0,sphereVertex1.c.y - cubeVertex1.max.y,0 };
-	//	}
-	//}
-
-	////‚»‚êˆÈŠO‚Ìê‡
-	//else
-	//{
-	//	if (sphereVertex1.c.x < cubeVertex1.c.x)v.x = sphereVertex1.c.x - cubeVertex1.min.x;
-	//	if (sphereVertex1.c.x > cubeVertex1.c.x)v.x = sphereVertex1.c.x - cubeVertex1.max.x;
-	//	if (sphereVertex1.c.y < cubeVertex1.c.y)v.y = sphereVertex1.c.y - cubeVertex1.min.y;
-	//	if (sphereVertex1.c.y > cubeVertex1.c.y)v.y = sphereVertex1.c.y - cubeVertex1.max.y;
-	//	if (sphereVertex1.c.z < cubeVertex1.c.z)v.z = sphereVertex1.c.z - cubeVertex1.min.z;
-	//	if (sphereVertex1.c.z > cubeVertex1.c.z)v.z = sphereVertex1.c.z - cubeVertex1.max.z;
-	//}
-
-	////ƒxƒNƒgƒ‹‚ª”¼Œa‚æ‚è¬‚³‚¯‚ê‚Î“–‚½‚è
-	//if(vector3Length(v) <= sphereVertex1.r.x)
-	//{
-	//	return 1;
-	//}
-
-	//“–‚½‚Á‚Ä‚¢‚È‚¢
+	//å½“ãŸã£ã¦ã„ãªã„
 	return 0;
 }

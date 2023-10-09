@@ -3,23 +3,22 @@
 PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* dev) {
 
 	HRESULT result;
-	ComPtr<ID3DBlob> vsBlob; // ’¸“_ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
-	ComPtr<ID3DBlob> psBlob; // ƒsƒNƒZƒ‹ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
-	ComPtr<ID3DBlob> errorBlob; // ƒGƒ‰[ƒIƒuƒWƒFƒNƒg
+	ComPtr<ID3DBlob> vsBlob;
+	ComPtr<ID3DBlob> psBlob;
+	ComPtr<ID3DBlob> errorBlob;
 
-	// ’¸“_ƒVƒF[ƒ_‚Ì“Ç‚İ‚İ‚ÆƒRƒ“ƒpƒCƒ‹
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/SpriteVertexShader.hlsl", // ƒVƒF[ƒ_ƒtƒ@ƒCƒ‹–¼
+		L"Resources/Shaders/SpriteVertexShader.hlsl", 
 		nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, // ƒCƒ“ƒNƒ‹[ƒh‰Â”\‚É‚·‚é
-		"main", "vs_5_0", // ƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg–¼AƒVƒF[ƒ_[ƒ‚ƒfƒ‹w’è
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // ƒfƒoƒbƒO—pİ’è
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, 
+		"main", "vs_5_0",
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
 		0,
 		&vsBlob, &errorBlob);
 
-	// ƒGƒ‰[‚È‚ç
+	
 	if (FAILED(result)) {
-		// errorBlob‚©‚çƒGƒ‰[“à—e‚ğstringŒ^‚ÉƒRƒs[
+		
 		std::string error;
 		error.resize(errorBlob->GetBufferSize());
 
@@ -27,24 +26,23 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* dev) {
 			errorBlob->GetBufferSize(),
 			error.begin());
 		error += "\n";
-		// ƒGƒ‰[“à—e‚ğo—ÍƒEƒBƒ“ƒhƒE‚É•\¦
+
 		OutputDebugStringA(error.c_str());
 		assert(0);
 	}
 
-	// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚Ì“Ç‚İ‚İ‚ÆƒRƒ“ƒpƒCƒ‹
+
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/SpritePixelShader.hlsl",   // ƒVƒF[ƒ_ƒtƒ@ƒCƒ‹–¼
+		L"Resources/Shaders/SpritePixelShader.hlsl",
 		nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, // ƒCƒ“ƒNƒ‹[ƒh‰Â”\‚É‚·‚é
-		"main", "ps_5_0", // ƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg–¼AƒVƒF[ƒ_[ƒ‚ƒfƒ‹w’è
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // ƒfƒoƒbƒO—pİ’è
+		D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		"main", "ps_5_0",
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
 		0,
 		&psBlob, &errorBlob);
 
-	// ƒGƒ‰[‚È‚ç
+
 	if (FAILED(result)) {
-		// errorBlob‚©‚çƒGƒ‰[“à—e‚ğstringŒ^‚ÉƒRƒs[
 		std::string error;
 		error.resize(errorBlob->GetBufferSize());
 
@@ -52,20 +50,18 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* dev) {
 			errorBlob->GetBufferSize(),
 			error.begin());
 		error += "\n";
-		// ƒGƒ‰[“à—e‚ğo—ÍƒEƒBƒ“ƒhƒE‚É•\¦
 		OutputDebugStringA(error.c_str());
 		assert(0);
 	}
 
-	// ’¸“_ƒŒƒCƒAƒEƒg
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-		{ // xyzÀ•W(1s‚Å‘‚¢‚½‚Ù‚¤‚ªŒ©‚â‚·‚¢)
+		{
 			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		},
 
-		{ // uvÀ•W(1s‚Å‘‚¢‚½‚Ù‚¤‚ªŒ©‚â‚·‚¢)
+		{
 			"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
@@ -75,117 +71,84 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* dev) {
 
 
 
-	// ƒfƒXƒNƒŠƒvƒ^ƒŒƒ“ƒW‚Ìİ’è
+
 	CD3DX12_DESCRIPTOR_RANGE descriptorRange{};
 	descriptorRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
-	//descriptorRange.NumDescriptors = 1;         //ˆê“x‚Ì•`‰æ‚Ég‚¤ƒeƒNƒXƒ`ƒƒ‚ª1–‡‚È‚Ì‚Å1
-	//descriptorRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	//descriptorRange.BaseShaderRegister = 0;     //ƒeƒNƒXƒ`ƒƒƒŒƒWƒXƒ^0”Ô
-	//descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	//// ƒ‹[ƒgƒpƒ‰ƒ[ƒ^‚Ìİ’è
-	//D3D12_ROOT_PARAMETER rootParams[3] = {};
-	//// ’è”ƒoƒbƒtƒ@0”Ô
-	//rootParams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;   // í—Ş
-	//rootParams[0].Descriptor.ShaderRegister = 0;                   // ’è”ƒoƒbƒtƒ@”Ô†
-	//rootParams[0].Descriptor.RegisterSpace = 0;                    // ƒfƒtƒHƒ‹ƒg’l
-	//rootParams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;  // ‘S‚Ä‚ÌƒVƒF[ƒ_‚©‚çŒ©‚¦‚é
-	//// ƒeƒNƒXƒ`ƒƒƒŒƒWƒXƒ^0”Ô
-	//rootParams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;   //í—Ş
-	//rootParams[1].DescriptorTable.pDescriptorRanges = &descriptorRange;		  //ƒfƒXƒNƒŠƒvƒ^ƒŒƒ“ƒW
-	//rootParams[1].DescriptorTable.NumDescriptorRanges = 1;              		  //ƒfƒXƒNƒŠƒvƒ^ƒŒƒ“ƒW”
-	//rootParams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;               //‘S‚Ä‚ÌƒVƒF[ƒ_‚©‚çŒ©‚¦‚é
-	//// ’è”ƒoƒbƒtƒ@1”Ô
-	//rootParams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;   //í—Ş
-	//rootParams[2].Descriptor.ShaderRegister = 1;		  //ƒfƒXƒNƒŠƒvƒ^ƒŒƒ“ƒW
-	//rootParams[2].Descriptor.RegisterSpace = 0;              		  //ƒfƒXƒNƒŠƒvƒ^ƒŒƒ“ƒW”
-	//rootParams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;                // ƒfƒtƒHƒ‹ƒg’l
-
+	
 	CD3DX12_ROOT_PARAMETER rootParams[2];
 	rootParams[0].InitAsConstantBufferView(0);
 	rootParams[1].InitAsDescriptorTable(1, &descriptorRange, D3D12_SHADER_VISIBILITY_ALL);
 
-	// ƒeƒNƒXƒ`ƒƒƒTƒ“ƒvƒ‰[‚Ìİ’è
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã®è¨­å®š
 	D3D12_STATIC_SAMPLER_DESC samplerDesc{};
-	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;                 //‰¡ŒJ‚è•Ô‚µiƒ^ƒCƒŠƒ“ƒOj
-	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;                 //cŒJ‚è•Ô‚µiƒ^ƒCƒŠƒ“ƒOj
-	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;                 //‰œsŒJ‚è•Ô‚µiƒ^ƒCƒŠƒ“ƒOj
-	samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;  //ƒ{[ƒ_[‚Ì‚Í•
-	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;                   //‘S‚ÄƒŠƒjƒA•âŠÔ
-	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;                                 //ƒ~ƒbƒvƒ}ƒbƒvÅ‘å’l
-	samplerDesc.MinLOD = 0.0f;                                              //ƒ~ƒbƒvƒ}ƒbƒvÅ¬’l
+	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;                        
+	samplerDesc.MinLOD = 0.0f;                                            
 	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;           //ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚©‚ç‚Ì‚İg—p‰Â”\
+	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	// ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“İ’è
+
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc{};
 
-	// ƒVƒF[ƒ_[‚Ìİ’è
+
 	pipelineDesc.VS.pShaderBytecode = vsBlob->GetBufferPointer();
 	pipelineDesc.VS.BytecodeLength = vsBlob->GetBufferSize();
 	pipelineDesc.PS.pShaderBytecode = psBlob->GetBufferPointer();
 	pipelineDesc.PS.BytecodeLength = psBlob->GetBufferSize();
 
-	// ƒTƒ“ƒvƒ‹ƒ}ƒXƒN‚Ìİ’è
-	pipelineDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // •W€İ’è
 
-	// ƒ‰ƒXƒ^ƒ‰ƒCƒU‚Ìİ’è
+	pipelineDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+
+
 	pipelineDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;  // ƒJƒŠƒ“ƒO‚µ‚È‚¢
-	//pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID; // ƒ|ƒŠƒSƒ““à“h‚è‚Â‚Ô‚µ
-	//pipelineDesc.RasterizerState.DepthClipEnable = true; // [“xƒNƒŠƒbƒsƒ“ƒO‚ğ—LŒø‚É
+	pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 
-	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ÌƒuƒŒƒ“ƒhİ’è
 	D3D12_RENDER_TARGET_BLEND_DESC& blenddesc = pipelineDesc.BlendState.RenderTarget[0];
-	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL; // RBGA‘S‚Ä‚Ìƒ`ƒƒƒ“ƒlƒ‹‚ğ•`‰æ
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
-	blenddesc.BlendEnable = true;                   // ƒuƒŒƒ“ƒh‚ğ—LŒø‚É‚·‚é
-	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;    // ‰ÁZ
-	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;      // ƒ\[ƒX‚Ì’l‚ğ100% g‚¤
-	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;    // ƒfƒXƒg‚Ì’l‚ğ  0% g‚¤
+	blenddesc.BlendEnable = true;                
+	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD; 
+	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;      
+	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO; 
 
-	// ”¼“§–¾‡¬
-	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;             // ‰ÁZ
-	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;         // ƒ\[ƒX‚ÌƒAƒ‹ƒtƒ@’l
-	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;    // 1.0f-ƒ\[ƒX‚ÌƒAƒ‹ƒtƒ@’l
+	blenddesc.BlendOp = D3D12_BLEND_OP_ADD; 
+	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;  
+	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA; 
 
-	// ’¸“_ƒŒƒCƒAƒEƒg‚Ìİ’è
+
 	pipelineDesc.InputLayout.pInputElementDescs = inputLayout;
 	pipelineDesc.InputLayout.NumElements = _countof(inputLayout);
 
-	// }Œ`‚ÌŒ`óİ’è
 	pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
-	// ‚»‚Ì‘¼‚Ìİ’è
-	pipelineDesc.NumRenderTargets = 1; // •`‰æ‘ÎÛ‚Í1‚Â
-	pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0`255w’è‚ÌRGBA
-	pipelineDesc.SampleDesc.Count = 1; // 1ƒsƒNƒZƒ‹‚É‚Â‚«1‰ñƒTƒ“ƒvƒŠƒ“ƒO
 
-	//ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒXƒe[ƒg‚Ìİ’è
+	pipelineDesc.NumRenderTargets = 1;
+	pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	pipelineDesc.SampleDesc.Count = 1;
+
+
 	pipelineDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-	pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS; // í‚Éã‘‚«ƒ‹[ƒ‹
+	pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS; 
 
 	pipelineDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	pipelineDesc.DepthStencilState.DepthEnable = false;
-	//pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	//pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-	//pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ
-	//ComPtr<ID3D12RootSignature> rootSignature;
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ìİ’è
+
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
 	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-	rootSignatureDesc.pParameters = rootParams; //ƒ‹[ƒgƒpƒ‰ƒ[ƒ^‚Ìæ“ªƒAƒhƒŒƒX
-	rootSignatureDesc.NumParameters = _countof(rootParams);        //ƒ‹[ƒgƒpƒ‰ƒ[ƒ^”
+	rootSignatureDesc.pParameters = rootParams;
+	rootSignatureDesc.NumParameters = _countof(rootParams); 
 
 	rootSignatureDesc.pStaticSamplers = &samplerDesc;
 	rootSignatureDesc.NumStaticSamplers = 1;
 
-	//ƒpƒCƒvƒ‰ƒCƒ“‚ÆãƒVƒOƒlƒ`ƒƒ‚ÌƒZƒbƒg
+
 	PipelineSet pipelineSet;
 
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒVƒŠƒAƒ‰ƒCƒY
 	ComPtr<ID3DBlob> rootSigBlob;
 	result = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0,
 		&rootSigBlob, &errorBlob);
@@ -194,24 +157,24 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* dev) {
 		IID_PPV_ARGS(&pipelineSet.rootsignature));
 	assert(SUCCEEDED(result));
 
-	// ƒpƒCƒvƒ‰ƒCƒ“‚Éƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ğƒZƒbƒg
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã«ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã‚’ã‚»ãƒƒãƒˆ
 	pipelineDesc.pRootSignature = pipelineSet.rootsignature.Get();
 
-	// ƒpƒCƒvƒ‰ƒ“ƒXƒe[ƒg‚Ì¶¬
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã®ç”Ÿæˆ
 	result = dev->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineSet.pipelinestate));
 	assert(SUCCEEDED(result));
 
-	// ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚ğ¶¬	
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã‚’ç”Ÿæˆ	
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//ƒVƒF[ƒ_‚©‚çŒ©‚¦‚é‚æ‚¤‚É
-	descHeapDesc.NumDescriptors = 1; // ƒVƒF[ƒ_[ƒŠƒ\[ƒXƒrƒ…[1‚Â
-	result = dev->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//¶¬
+	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//ã‚·ã‚§ãƒ¼ãƒ€ã‹ã‚‰è¦‹ãˆã‚‹ã‚ˆã†ã«
+	descHeapDesc.NumDescriptors = 1; // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼1ã¤
+	result = dev->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//ç”Ÿæˆ
 	if (FAILED(result)) {
 		assert(0);
 	}
 
-	//ƒpƒCƒvƒ‰ƒCƒ“‚Æƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ğ•Ô‚·
+	//ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã¨ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã‚’è¿”ã™
 	return pipelineSet;
 }
 
@@ -224,10 +187,10 @@ void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height
 
 	HRESULT result = S_FALSE;
 
-	//V‚µ‚¢ƒXƒvƒ‰ƒCƒg‚ğì‚é
+	//æ–°ã—ã„ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’ä½œã‚‹
 	/*Sprite sprite{};*/
 
-	//’¸“_ƒf[ƒ^
+	//é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿
 	VertexPosUv vertices[] = {
 		{{	0.0f, 100.0f,	0.0f},{0.0f,1.0f}},
 		{{	0.0f,	0.0f,	0.0f},{0.0f,0.0f}},
@@ -237,95 +200,84 @@ void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height
 
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosUv) * _countof(vertices));
 
-	// ƒq[ƒvƒvƒƒpƒeƒB
+	// ãƒ’ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	CD3DX12_HEAP_PROPERTIES heapPropsVertexBuffer = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// ƒŠƒ\[ƒXİ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	CD3DX12_RESOURCE_DESC resourceDescVertexBuffer =
 		CD3DX12_RESOURCE_DESC::Buffer(sizeof(vertices));
 
-	//’¸“_ƒoƒbƒtƒ@¶¬
+	//é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	result = dev->CreateCommittedResource(
-		&heapPropsVertexBuffer, // ƒq[ƒvİ’è
+		&heapPropsVertexBuffer, // ãƒ’ãƒ¼ãƒ—è¨­å®š
 		D3D12_HEAP_FLAG_NONE,
-		&resourceDescVertexBuffer, // ƒŠƒ\[ƒXİ’è
+		&resourceDescVertexBuffer, // ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&vertBuff));
 	assert(SUCCEEDED(result));
 
-	//’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒf[ƒ^“]‘—
+	//é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿è»¢é€
 	VertexPosUv* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	memcpy(vertMap, vertices, sizeof(vertices));
 	vertBuff->Unmap(0, nullptr);
 
-	// ’¸“_ƒoƒbƒtƒ@ƒrƒ…[‚Ìì¬
-	// GPU‰¼‘zƒAƒhƒŒƒX
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ã®ä½œæˆ
+	// GPUä»®æƒ³ã‚¢ãƒ‰ãƒ¬ã‚¹
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	// ’¸“_ƒoƒbƒtƒ@‚ÌƒTƒCƒY
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
 	vbView.SizeInBytes = sizeof(vertices);
-	// ’¸“_1‚Â•ª‚Ìƒf[ƒ^ƒTƒCƒY
+	// é ‚ç‚¹1ã¤åˆ†ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
 	vbView.StrideInBytes = sizeof(vertices[0]);
 
-	// ƒq[ƒvƒvƒƒpƒeƒB
+	// ãƒ’ãƒ¼ãƒ—ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
 	CD3DX12_HEAP_PROPERTIES heapPropsConstantBuffer = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	// ƒŠƒ\[ƒXİ’è
+	// ãƒªã‚½ãƒ¼ã‚¹è¨­å®š
 	CD3DX12_RESOURCE_DESC resourceDescConstantBuffer =
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff);
 
-	// ’è”ƒoƒbƒtƒ@‚Ì¶¬
 	result = dev->CreateCommittedResource(
-		&heapPropsConstantBuffer, // ƒq[ƒvİ’è
+		&heapPropsConstantBuffer,
 		D3D12_HEAP_FLAG_NONE,
-		&resourceDescConstantBuffer, // ƒŠƒ\[ƒXİ’è
+		&resourceDescConstantBuffer,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuff));
 	assert(SUCCEEDED(result));
 
-	// ’è”ƒoƒbƒtƒ@‚Éƒf[ƒ^“]‘—
 	ConstBufferData* constMap = nullptr;
-	result = constBuff->Map(0, nullptr, (void**)&constMap); // ƒ}ƒbƒsƒ“ƒO
+	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	constMap->color = XMFLOAT4(1, 1, 1, 1);
 	assert(SUCCEEDED(result));
 
-	//•½s“Š‰es—ñ
 	constMap->mat = XMMatrixOrthographicOffCenterLH(0.0f, window_width, window_height, 0.0f, 0.0f, 1.0f);
 	constBuff->Unmap(0, nullptr);
 }
-//ƒXƒvƒ‰ƒCƒg‹¤’ÊƒOƒ‰ƒtƒBƒbƒNƒXƒRƒ}ƒ“ƒh‚ÌƒZƒbƒg
+
 void Sprite::SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon) {
 
-	// ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚Æƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ìİ’èƒRƒ}ƒ“ƒh
+
 	cmdList->SetPipelineState(spriteCommon.pipelineSet.pipelinestate.Get());
 	cmdList->SetGraphicsRootSignature(spriteCommon.pipelineSet.rootsignature.Get());
 
-	// ƒvƒŠƒ~ƒeƒBƒuŒ`ó‚Ìİ’èƒRƒ}ƒ“ƒh
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); // OŠpŒ`ƒŠƒXƒg
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	//ƒeƒNƒXƒ`ƒƒ—p‚ÅƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ìİ’è
 	ID3D12DescriptorHeap* ppHeaps[] = { spriteCommon.descHeap.Get() };
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 }
-
-//ƒXƒvƒ‰ƒCƒg’P‘Ì•`‰æ
 
 void Sprite::SpriteDraw(ID3D12GraphicsCommandList* cmdList_, const SpriteCommon& spriteCommon, ID3D12Device* dev,
 	D3D12_VERTEX_BUFFER_VIEW& vbView) {
 
 	this->cmdList = cmdList_;
 
-	// ’¸“_ƒoƒbƒtƒ@‚Ìİ’èƒRƒ}ƒ“ƒh
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
 
-	// ’è”ƒoƒbƒtƒ@(CBV)‚Ìİ’èƒRƒ}ƒ“ƒh
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
 
-	//ƒVƒF[ƒ_[ƒŠƒ\[ƒXƒrƒ…[‚ğƒZƒbƒg
 	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(spriteCommon.descHeap->GetGPUDescriptorHandleForHeapStart(),
 		texNumber, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
-	//ƒ|ƒŠƒSƒ“‚Ì•`‰æ
 	cmdList->DrawInstanced(4, 1, 0, 0);
 
 }
@@ -333,25 +285,18 @@ void Sprite::SpriteDraw(ID3D12GraphicsCommandList* cmdList_, const SpriteCommon&
 SpriteCommon Sprite::SpriteCommonCreate(ID3D12Device* dev, int window_width, int window_height) {
 	HRESULT result = S_FALSE;
 
-	//V‚½‚ÈƒXƒvƒ‰ƒCƒg‹¤’Êƒf[ƒ^‚ğ¶¬
 	SpriteCommon spriteCommon{};
 
-	//ƒXƒvƒ‰ƒCƒg—pƒpƒCƒvƒ‰ƒCƒ“¶¬
 	spriteCommon.pipelineSet = SpriteCreateGraphicsPipeline(dev);
 
-	//•½s“Š‰es—ñ¶¬
-	spriteCommon.matProjrction = XMMatrixOrthographicOffCenterLH(0.0f, (float)window_width, (float)window_height, 0.0f, 0.0f, 1.0f);
+	spriteCommon.matProjection = XMMatrixOrthographicOffCenterLH(0.0f, (float)window_width, (float)window_height, 0.0f, 0.0f, 1.0f);
 
-	//HRESULT result = S_FALSE;
-
-	//ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚ğ¶¬
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	descHeapDesc.NumDescriptors = SpriteCommon::spriteSRVCount;
 	result = dev->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&spriteCommon.descHeap));
 
-	//¶¬‚µ‚½ƒXƒvƒ‰ƒCƒg¡“ú‚Ä‚¤‚¤‚Å[‚½‚ğ•Ô‚·
 	return spriteCommon;
 }
 
@@ -363,11 +308,9 @@ void Sprite::SpriteUpdate(Sprite& sprite, const SpriteCommon& spriteCommon) {
 
 	sprite.matWorld *= XMMatrixTranslation(sprite.position.x, sprite.position.y, sprite.position.z);
 
-
-	// ’è”ƒoƒbƒtƒ@‚Éƒf[ƒ^“]‘—
 	ConstBufferData* constMap = nullptr;
-	HRESULT result = sprite.constBuff->Map(0, nullptr, (void**)&constMap); // ƒ}ƒbƒsƒ“ƒO
-	constMap->mat = sprite.matWorld * spriteCommon.matProjrction;
+	HRESULT result = sprite.constBuff->Map(0, nullptr, (void**)&constMap);
+	constMap->mat = sprite.matWorld * spriteCommon.matProjection;
 	sprite.constBuff->Unmap(0, nullptr);
 }
 
@@ -379,12 +322,11 @@ void Sprite::SpriteCommonLoadTexture(SpriteCommon& spriteCommon, UINT texnumber,
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
 
-	// WICƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh
 	result = LoadFromWICFile(filename, WIC_FLAGS_NONE, &metadata, scratchImg);
 	assert(SUCCEEDED(result));
 
 	ScratchImage mipChain{};
-	// ƒ~ƒbƒvƒ}ƒbƒv¶¬
+
 	result = GenerateMipMaps(
 		scratchImg.GetImages(), scratchImg.GetImageCount(), scratchImg.GetMetadata(),
 		TEX_FILTER_DEFAULT, 0, mipChain);
@@ -393,60 +335,52 @@ void Sprite::SpriteCommonLoadTexture(SpriteCommon& spriteCommon, UINT texnumber,
 		metadata = scratchImg.GetMetadata();
 	}
 
-	// “Ç‚İ‚ñ‚¾ƒfƒBƒtƒ…[ƒYƒeƒNƒXƒ`ƒƒ‚ğSRGB‚Æ‚µ‚Äˆµ‚¤
 	metadata.format = MakeSRGB(metadata.format);
 
-	// ƒŠƒ\[ƒXİ’è
 	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		metadata.format, metadata.width, (UINT)metadata.height, (UINT16)metadata.arraySize,
 		(UINT16)metadata.mipLevels);
 
-	// ƒq[ƒvƒvƒƒpƒeƒB
 	CD3DX12_HEAP_PROPERTIES heapProps =
 		CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
 
-	// ƒeƒNƒXƒ`ƒƒ—pƒoƒbƒtƒ@‚Ì¶¬
 	result = dev->CreateCommittedResource(
 		&heapProps, D3D12_HEAP_FLAG_NONE, &texresDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ, // ƒeƒNƒXƒ`ƒƒ—pw’è
+		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr, IID_PPV_ARGS(&spriteCommon.texBuff[texnumber]));
 	assert(SUCCEEDED(result));
 
-	// ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@‚Éƒf[ƒ^“]‘—
 	for (size_t i = 0; i < metadata.mipLevels; i++) {
-		const Image* img = scratchImg.GetImage(i, 0, 0); // ¶ƒf[ƒ^’Šo
+		const Image* img = scratchImg.GetImage(i, 0, 0);
 		result = spriteCommon.texBuff[texnumber]->WriteToSubresource(
 			(UINT)i,
-			nullptr,              // ‘S—Ìˆæ‚ÖƒRƒs[
-			img->pixels,          // Œ³ƒf[ƒ^ƒAƒhƒŒƒX
-			(UINT)img->rowPitch,  // 1ƒ‰ƒCƒ“ƒTƒCƒY
-			(UINT)img->slicePitch // 1–‡ƒTƒCƒY
+			nullptr, 
+			img->pixels,
+			(UINT)img->rowPitch,
+			(UINT)img->slicePitch
 		);
 		assert(SUCCEEDED(result));
 	}
 
-	// ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[ì¬
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // İ’è\‘¢‘Ì
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	D3D12_RESOURCE_DESC resDesc = spriteCommon.texBuff[texnumber]->GetDesc();
 
 	srvDesc.Format = resDesc.Format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2DƒeƒNƒXƒ`ƒƒ
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 
-	dev->CreateShaderResourceView(spriteCommon.texBuff[texnumber].Get(), //ƒrƒ…[‚ÆŠÖ˜A•t‚¯‚éƒoƒbƒtƒ@
-		&srvDesc, //ƒeƒNƒXƒ`ƒƒİ’èî•ñ
+	dev->CreateShaderResourceView(spriteCommon.texBuff[texnumber].Get(),
+		&srvDesc,
 		CD3DX12_CPU_DESCRIPTOR_HANDLE(spriteCommon.descHeap->GetCPUDescriptorHandleForHeapStart(), texnumber, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
 	);
 
-	//return S_OK;
 }
 
 void Sprite::SpriteTransferVertexBuffer(const Sprite& sprite) {
 
 	HRESULT result = S_FALSE;
 
-	//’¸“_ƒf[ƒ^
 	VertexPosUv vertices[] = {
 		{{},{0.0f,1.0f}},
 		{{},{0.0f,0.0f}},

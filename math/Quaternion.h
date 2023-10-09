@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include "Matrix4.h"
-
+#pragma warning(disable:4828) 
 struct Quaternion
 {
 	Vector3 v;
@@ -22,28 +22,28 @@ struct Quaternion
 	};
 };
 
-//’PˆÊQuaternion‚ğ•Ô‚·
+//å˜ä½Quaternionã‚’è¿”ã™
 Quaternion IdentityQuaternion();
-//Ï
+//ç©
 Quaternion Multiply(const Quaternion& q1, const Quaternion& q2);
-//‹¤–ğQuaternion‚ğ•Ô‚·
+//å…±å½¹Quaternionã‚’è¿”ã™
 Quaternion Conjugate(const Quaternion& q);
-//Quaternion‚Ìnorm‚ğ•Ô‚·
+//Quaternionã®normã‚’è¿”ã™
 float Norm(const Quaternion& q);
-//³‹K‰»
+//æ­£è¦åŒ–
 Quaternion Normalize(const Quaternion& q);
-//‹tQuaternion‚ğ•Ô‚·
+//é€†Quaternionã‚’è¿”ã™
 Quaternion Inverse(const Quaternion& q);
-//Quaternion‚Ì“àÏ‚ğ•Ô‚·
+//Quaternionã®å†…ç©ã‚’è¿”ã™
 float dot(const Quaternion& q0, const Quaternion& q1);
 
-//”CˆÓ²‰ñ“]‚ğ•\‚·Quaternion‚Ì¶¬
+//ä»»æ„è»¸å›è»¢ã‚’è¡¨ã™Quaternionã®ç”Ÿæˆ
 Quaternion MakeAxisAngle(const Vector3& vector, float angle);
-//ƒxƒNƒgƒ‹‚ğQuaternion‚Å‰ñ“]‚³‚¹‚½Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ‹‚ß‚é
+//ãƒ™ã‚¯ãƒˆãƒ«ã‚’Quaternionã§å›è»¢ã•ã›ãŸçµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ±‚ã‚ã‚‹
 Vector3 RotateVector(const Vector3& v, const Quaternion& q);
-//quaternion‚©‚ç‰ñ“]s—ñ‚ğ‹‚ß‚é
+//quaternionã‹ã‚‰å›è»¢è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
 Matrix4 MakeRotateMatrix(const Quaternion& q);
 
-//‹…–ÊüŒ`•âŠÔ
+//çƒé¢ç·šå½¢è£œé–“
 Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
 

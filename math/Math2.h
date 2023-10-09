@@ -2,7 +2,7 @@
 #include "DirectXMath.h"
 using namespace DirectX;
 
-//Œü‚¢‚Ä‚¢‚é•ûŒü‚É‰ñ“]
+
 void rollRotation(XMFLOAT3 *vector, XMFLOAT3 rotation);
 
 float vector3Length(XMFLOAT3 vector_);

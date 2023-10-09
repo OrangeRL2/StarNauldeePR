@@ -28,9 +28,6 @@ public:
 
 	void CameraFollow();
 
-	/// <summary>
-
-	/// </summary>
 	void ShotStraightBullet();
 
 	void Rotate(XMFLOAT3 targetPos);
@@ -63,7 +60,6 @@ public:
 
 	void UpdateCollision();
 
-	//シーンごとのセット
 	void SetTitle();
 	void SetTutorial();
 	void SetStage();
@@ -113,8 +109,8 @@ private:
 	float frame = 0.0f;
 	float maxFrame = 6.20f;
 	int rotateFlag;
-	//プレイヤーの接近にかかるフレーム
+
 	float distanceTime = 60.0f;
-	//接近に使うタイマー
+
 	float distanceTimer = 0.0f;
 };

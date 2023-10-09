@@ -96,7 +96,7 @@ private:
 
 	//----------自作クラス---------
 	//Title manager
-	TitleManager title;
+	std::unique_ptr<TitleManager> title;
 	//Player
 	std::unique_ptr<Player> player;
 	std::unique_ptr<PlayerBullet> playerBullet;

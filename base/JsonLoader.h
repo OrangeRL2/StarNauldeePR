@@ -8,8 +8,7 @@
 
 class JsonLoader
 {
-private:	//エイリアス
-	//DirectX::を省略
+private:	//alias
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -17,15 +16,15 @@ private:	//エイリアス
 	
 public:
 	struct ObjectData {
-		// ファイル名
+
 		std::string filename;
-		// 平行移動
+
 		XMFLOAT3 translation;
-		// 回転角
+
 		XMFLOAT3 rotation;
-		// スケーリング
+
 		XMFLOAT3 scaling;
-		//動き
+
 		XMFLOAT3 point_1;
 		XMFLOAT3 point_2;
 		XMFLOAT3 point_3;
@@ -33,11 +32,9 @@ public:
 		XMFLOAT3 point_5;
 	};
 
-	//メンバ関数
 public:
 	void LoadFile(const std::string file_name);
 
-	//ゲッター
 	size_t GetObjectDatas() { return objectData.size(); }
 	ObjectData GetObjectData(int number) { return objectData[number]; }
 	std::string GetFileName(int number) { return objectData[number].filename; }
@@ -50,7 +47,6 @@ public:
 	XMFLOAT3 GetPoint4(int number) { return objectData[number].point_4; }
 	XMFLOAT3 GetPoint5(int number) { return objectData[number].point_5; }
 
-	//メンバ変数
 private:
 	std::vector<ObjectData>objectData;
 };

@@ -14,21 +14,21 @@ class Camera
 {
 
 public:
-	//シングルトンインスタンス
+	//singleton instance
 	static Camera* GetInstance();
 	static void SetInput(Input* input) { Camera::input = input; }
 	static void SetDXInput(DXInput* dxInput) { Camera::dxInput = dxInput; }
-	//インストラクタ デストラクタ
+	//Instructor Destructor
 	Camera();
 	~Camera();
-	//初期化
+
 	void Initialize();
-	//更新
+	//譖ｴ譁ｰ
 	void Update();
-	//デバッグ Arrowキーで視点座標変更
+	//Arrow key to change viewpoint coordinates
 	void DebugUpdate();
 
-	//ゲッターセッター
+	//Getter Setter
 	void SetTarget(XMFLOAT3 pos);
 	void SetEye(XMFLOAT3 pos);
 	XMFLOAT3 GetEye() { return eye_; };
@@ -39,22 +39,21 @@ public:
 	XMMATRIX GetMatViewProjection() { return matView_ * matProjection_; };
 
 private:
-	//入力
-	//キーボード
+	
 	static Input* input;
-	//コントローラー
+	//Controller
 	static DXInput* dxInput;
-	//射影変換
+
 	XMMATRIX matProjection_{};
-	//ビュー変換行列
+
 	XMMATRIX matView_{};
 	XMFLOAT3 eye_ = { 0, 20, -100 };
 	XMFLOAT3 target_ = { 0, 0, 0 };
 	XMFLOAT3 up_ = { 0, 1, 0 };
 
-	//ターゲットまでの距離
+	//Distance to target
 	float DebugTargetDistance = 20.0f;
-	//加算用
+	//蜉邂礼畑
 	float DebugChangeRot = 0.0f;
 	float DebugChangeRot2 = 0.5f;
 	float DebugChangeDistance = 0.0f;

@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Math.h"
 #define PI 3.14159265359
-
+#pragma warning(disable:4828) 
 Input* Camera::input = nullptr;
 DXInput* Camera::dxInput = nullptr;
 
@@ -22,14 +22,14 @@ Camera::~Camera()
 
 void Camera::Initialize()
 {
-	//Ë‰e•ÏŠ·
+	//å°„å½±å¤‰æ›
 	matProjection_ = XMMatrixPerspectiveFovLH(
-		XMConvertToRadians(45.0f),			//ã‰º‰æŠp45“x
-		(float)window_width / window_height,//ƒAƒXƒyƒNƒg”ä(‰æ–Ê‰¡•/‰æ–Ê—§•)
-		0.1f, 1000.0f						//‘O’[A‰œ’[
+		XMConvertToRadians(45.0f),			//ä¸Šä¸‹ç”»è§’45åº¦
+		(float)window_width / window_height,//ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”(ç”»é¢æ¨ªå¹…/ç”»é¢ç«‹å¹…)
+		0.1f, 1000.0f						//å‰ç«¯ã€å¥¥ç«¯
 	);
 
-	//s—ñŒvZ
+	//è¡Œåˆ—è¨ˆç®—
 	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
 }
 
@@ -41,10 +41,10 @@ void Camera::Update()
 
 void Camera::DebugUpdate()
 {
-	//1ƒtƒŒ[ƒ€‚ ‚½‚è‚ÌˆÚ“®—Ê
+	//1ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ãŸã‚Šã®ç§»å‹•é‡
 	float rot = (float)PI / 120.0f;
 
-	//‹“_À•W‚ğ•ÏX
+	//è¦–ç‚¹åº§æ¨™ã‚’å¤‰æ›´
 	if (input->PushKey(DIK_LEFT))
 	{
 		DebugChangeRot -= rot;
@@ -62,7 +62,7 @@ void Camera::DebugUpdate()
 		DebugChangeRot2 += rot;
 	}
 
-	//ƒ^[ƒQƒbƒg‚Ü‚Å‚Ì‹——£‚ğ•ÏX
+	//ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¾ã§ã®è·é›¢ã‚’å¤‰æ›´
 	if (input->PushKey(DIK_O))
 	{
 		DebugTargetDistance -= 0.2;
@@ -72,7 +72,7 @@ void Camera::DebugUpdate()
 		DebugTargetDistance += 0.2;
 	}
 
-	//‹“_À•W‚É‘ã“ü
+	//è¦–ç‚¹åº§æ¨™ã«ä»£å…¥
 	eye_.x = cos(DebugChangeRot) * DebugTargetDistance + target_.x;
 	eye_.y = sin(DebugChangeRot2) * DebugTargetDistance + target_.y;
 	eye_.z = sin(DebugChangeRot) * DebugTargetDistance + target_.z;

@@ -4,34 +4,34 @@
 class Collision
 {
 private:
-	//“–‚½‚è”»’è‚ÌŒvZ‚É•K—v‚È\‘¢‘Ì
+
 	struct CubeVertex
 	{
-		DirectX::XMFLOAT3 c;	//’†S
-		//DirectX::XMFLOAT3 v[8];	//Še’¸“_‚ÌÀ•W
+		DirectX::XMFLOAT3 c;	
+		//DirectX::XMFLOAT3 v[8];
 		DirectX::XMFLOAT3 min;	//-x,-y,-z
 		DirectX::XMFLOAT3 max;	//x,y,z
 	};
-	//“–‚½‚è”»’è‚ÌŒvZ‚É•K—v‚È\‘¢‘Ì
+	//å½“ãŸã‚Šåˆ¤å®šã®è¨ˆç®—ã«å¿…è¦ãªæ§‹é€ ä½“
 	struct SphereVertex
 	{
-		DirectX::XMFLOAT3 c;	//’†S
-		DirectX::XMFLOAT3 r;	//”¼Œa
+		DirectX::XMFLOAT3 c;	//center
+		DirectX::XMFLOAT3 r;	//radius
 		DirectX::XMFLOAT3 min;
 		DirectX::XMFLOAT3 max;
 	};
 public:
-	//Õ“Ë”»’è‚ğs‚¤ƒIƒuƒWƒFƒNƒg‚ğƒZƒbƒg(’¼•û‘Ì‚Æ‹…)
+	//Set objects for collision detection (rectangle and sphere)
 	void SetObject(DirectX::XMFLOAT3 cubePos, DirectX::XMFLOAT3 cubeScale);
-	//XV
+	
 	bool Update(DirectX::XMFLOAT3 spherePos, DirectX::XMFLOAT3 sphereScale);
 
-	//ƒQƒbƒ^[
+	//Getter
 	DirectX::XMFLOAT3 GetPosition() { return cubeVertex1.c; }
 	DirectX::XMFLOAT3 GetMin() { return cubeVertex1.min; }
 	DirectX::XMFLOAT3 GetMax() { return cubeVertex1.max; }
 private:
-	//“–‚½‚è”»’è‚É•K—v‚È•Ï”
+	//collision
 	CubeVertex cubeVertex1;
 	SphereVertex sphereVertex1;
 

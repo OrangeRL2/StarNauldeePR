@@ -27,34 +27,33 @@ struct PipelineSet {
 };
 
 
-//スプライト用
+//sprite
 struct VertexPosUv {
 	XMFLOAT3 pos;
 	XMFLOAT2 uv;
 };
 
-//スプライトの共通データ
+
 struct SpriteCommon {
 
-	//テクスチャの最大枚数
+	//Maximum number of textures
 	static const int spriteSRVCount = 512;
 
-	//パイプラインセット
+	
 	PipelineSet pipelineSet;
 
-	//射影行列
-	XMMATRIX matProjrction{};
 
-	//テクスチャ用デスクリプタヒープの生成
+	XMMATRIX matProjection{};
+
 	ComPtr<ID3D12DescriptorHeap> descHeap;
-	//テクスチャソース(テクスチャバッファ)の配列
+
 	ComPtr<ID3D12Resource> texBuff[spriteSRVCount];
 
 };
 
 class Sprite
 {
-	//-----------スプライト----------
+	//-----------SPRITE----------
 
 public:
 
@@ -63,21 +62,19 @@ public:
 
 	PipelineSet SpriteCreateGraphicsPipeline(ID3D12Device* dev);
 
-	//スプライト1枚分のデータ
 
-	//頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
-	//頂点バッファビュー
+
 	D3D12_VERTEX_BUFFER_VIEW vbView{};
 
 private:
-	//定数バッファ
+
 	ComPtr<ID3D12Resource> constBuff;
-	//Z軸回りの回転角
+
 	float rotation = 0.0f;
-	//座標
+
 	XMFLOAT3 position = { 0,0,0 };
-	//ワールド行列
+
 	XMMATRIX matWorld;
 
 	UINT texNumber = 0;
@@ -85,11 +82,11 @@ private:
 	XMFLOAT2 size = { 100,100 };
 
 	struct ConstBufferData {
-		XMFLOAT4 color; // 色 (RGBA)
-		XMMATRIX mat; //座標
+		XMFLOAT4 color; 
+		XMMATRIX mat; 
 	};
 
-	//コマンドリスト
+	//commandlist
 	ComPtr<ID3D12GraphicsCommandList> cmdList;
 	DirectXCommon* dx = nullptr;
 	ComPtr<ID3D12DescriptorHeap> descHeap;
@@ -97,33 +94,28 @@ private:
 
 public:
 
-	//スプライト生成
+
 	void SpriteCreate(ID3D12Device* dev, int window_width, int window_height);
 
-	//スプライト共通データ生成
+
 	SpriteCommon SpriteCommonCreate(ID3D12Device* dev, int window_width, int window_height);
 
-	//スプライト共通グラフィックスコマンドのセット
-	void SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon);
 
-	//スプライト単体描画
+	void SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon);
 
 	void SpriteDraw(ID3D12GraphicsCommandList* cmdList_, const SpriteCommon& spriteCommon, ID3D12Device* dev,
 		D3D12_VERTEX_BUFFER_VIEW& vbView);
 
-	//スプライト単体更新
 	void SpriteUpdate(Sprite& sprite, const SpriteCommon& spriteCommon);
 
-	//スプライト共通テクスチャ読み込み
 	void SpriteCommonLoadTexture(SpriteCommon& spriteCommon, UINT texnumber, const wchar_t* filename, ID3D12Device* dev);
 
-	//スプライト単体頂点バッファの転送
 	void SpriteTransferVertexBuffer(const Sprite& sprite);
 
-	//セッター
 	void SetTexNumber(UINT texnumber) { this->texNumber = texnumber; }
 
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
+	void SetRotation(float rotation) { this->rotation = rotation; }
 	void SetScale(XMFLOAT2 scale) { this->size = scale; }
 
 

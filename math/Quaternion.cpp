@@ -3,7 +3,7 @@
 #include "math.h"
 #define PI 3.141592
 #define EPSILON 0.000001
-
+#pragma warning(disable:4828) 
 Quaternion IdentityQuaternion()
 {
     Quaternion i(0, 0, 0, 0);
@@ -89,26 +89,26 @@ Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t)
     Quaternion q2 = q0;
     Quaternion q3 = q1;
 
-    //“àÏ
+    //å†…ç©
     float d = dot(q2,q3);
 
     if(d < 0)
     { 
-        q2 = Conjugate(q2);   //‚à‚¤•Ğ•û‚Ì‰ñ“]‚ğ—˜—p‚·‚é
-        d = -d;     //“àÏ‚à”½“]
+        q2 = Conjugate(q2);   //ã‚‚ã†ç‰‡æ–¹ã®å›è»¢ã‚’åˆ©ç”¨ã™ã‚‹
+        d = -d;     //å†…ç©ã‚‚åè»¢
     }
 
-    //‚È‚·Šp‚ª0‚Ìê‡
+    //ãªã™è§’ãŒ0ã®å ´åˆ
     if (d >= 1.0f - EPSILON)
     {
         return Quaternion((1.0f - t) * q2.v.x + t * q3.v.x, (1.0f - t) * q2.v.y + t * q3.v.y,
             (1.0f - t) * q2.v.z + t * q3.v.z, (1.0f - t) * q2.w + t * q3.w);
     }
 
-    //‚È‚·Šp‚ğ‹‚ß‚é
+    //ãªã™è§’ã‚’æ±‚ã‚ã‚‹
     float theta = std::acos(d);
 
-    //theta‚Æsin‚ğg‚Á‚Ä•âŠ®ŒW”scale0,scale1‚ğ‹‚ß‚é
+    //thetaã¨sinã‚’ä½¿ã£ã¦è£œå®Œä¿‚æ•°scale0,scale1ã‚’æ±‚ã‚ã‚‹
     float scale0 = (sin((1 - t) * theta) / sin(theta));
     float scale1 = (sin(t * theta) / sin(theta));
 

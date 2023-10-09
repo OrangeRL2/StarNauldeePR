@@ -1,21 +1,21 @@
 #include "Spline.h"
 #include <windows.h>
 #include <sysinfoapi.h>
-
+#pragma warning(disable:4828)
 void Spline::Initialize() {
 	startCount = GetTickCount64();
 }
 
 XMFLOAT3 Spline::Update(std::vector<XMFLOAT3>& points, float timeRate) {
 
-		//Œo‰ßŠÔ‚ÌŒvZ
+		//çµŒéæ™‚é–“ã®è¨ˆç®—
 		nowCount = GetTickCount64();
 		elapsedCount = nowCount - startCount;
 		float elapsedTime = static_cast<float> (elapsedCount) / 1000.0f;
 
 		timeRate = elapsedTime / maxTime;
 
-		//timeRate‚ª1.0fˆÈã‚É‚È‚Á‚½‚çAŸ‚Ì‹æŠÔ‚Éi‚Ş
+		//timeRateãŒ1.0fä»¥ä¸Šã«ãªã£ãŸã‚‰ã€æ¬¡ã®åŒºé–“ã«é€²ã‚€
 		if (timeRate >= 1.0f) {
 			if (startIndex < points.size() - 3) {
 
@@ -40,19 +40,19 @@ void Spline::Draw() {
 }
 
 XMFLOAT3 Spline::SplinePosition(std::vector<XMFLOAT3>& points, size_t startIndex, float t) {
-	//•âŠÔ‚·‚×‚«“_
+	//è£œé–“ã™ã¹ãç‚¹
 	size_t n = points.size() - 2;
 
 	if (startIndex > n) return points[n];
 	if (startIndex < 1) return points[1];
 
-	//p0~p3‚Ì§Œä“_‚ğæ“¾‚·‚é
+	//p0~p3ã®åˆ¶å¾¡ç‚¹ã‚’å–å¾—ã™ã‚‹
 	XMFLOAT3 p0_ = points[startIndex - 1];
 	XMFLOAT3 p1_ = points[startIndex];
 	XMFLOAT3 p2_ = points[startIndex + 1];
 	XMFLOAT3 p3_ = points[startIndex + 2];
 
-	//Catmull-Rom ‚Ì®‚É‚æ‚é•âŠÔ
+	//Catmull-Rom ã®å¼ã«ã‚ˆã‚‹è£œé–“
 	XMFLOAT3 position;
 
 	position.x = 0.5f * (p1_.x * 2.0f + (-p0_.x + p2_.x) *
