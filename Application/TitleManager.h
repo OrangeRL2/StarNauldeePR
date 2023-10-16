@@ -9,6 +9,7 @@
 #include "Mathfunc.h"
 #include "SimpleMath.h"
 #include "MathFunc.h"
+#include "SpritePop.h"
 enum TitleMenu
 {
 	start,
@@ -19,7 +20,7 @@ class TitleManager
 {
 public:
 	void Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* dev);
-	void Update();
+	void Update(FbxModel* model, FbxModel* model2, ID3D12Device* dev);
 	void Draw(ID3D12GraphicsCommandList* cmdList_,ID3D12Device* dev);
 
 	void End();
@@ -30,9 +31,12 @@ public:
 	void StartDraw();
 	void GameDraw(ID3D12GraphicsCommandList* cmdList_, ID3D12Device* dev);
 	//void ThanksForPlayingText();
-	void ModelDraw();
+	void ModelDraw(ID3D12Device* dev);
 
-	void Transition();
+	void Transition(ID3D12Device* dev);
+	void PopInit(ID3D12Device* dev);
+	void PopTransInit(ID3D12Device* dev);
+	void TransitionPop(ID3D12Device* dev);
 
 	bool IsTitle() { return isTitle; };
 
@@ -47,6 +51,7 @@ public:
 	static void SetCamera(Camera* camera) { TitleManager::camera = camera; }
 	static void SetInput(Input* input) { TitleManager::input = input; }
 	static void SetDXInput(DXInput* dxInput) { TitleManager::dxInput = dxInput; }
+	bool IsDead() { return isDead; }
 
 	bool isTitle = true;
 
@@ -67,7 +72,7 @@ private:
 	Sprite titleSprite2;	//title.png
 	Sprite pressSpace;	//start.png
 	Sprite nintendoCopyright;//start.png
-
+	
 	Sprite S;//S.png
 	Sprite T;//T.png
 	Sprite A;//A.png
@@ -76,6 +81,10 @@ private:
 
 	Sprite handle;//handle2.png
 	Sprite titleImage;//titleImage.png
+	Sprite controlImage;//Controls.png
+
+	Sprite starSprite;//star.png
+	Sprite arwingSprite;//arwing.png
 
 	SpriteCommon spriteCommon;
 
@@ -104,9 +113,9 @@ private:
 	float turning = 0.0f;
 	float posY[3] = { 0.0f,0.0f,0.0f };
 
-	DirectX::XMFLOAT3 position = { 0.0f,0.5f,0.0f };
-	DirectX::XMFLOAT3 position0 = { 0.0f,0.5f,0.0f };
-	DirectX::XMFLOAT3 position1 = { 0.0f,0.5f,0.0f };
+	DirectX::XMFLOAT3 position = { 0.0f,0.0f,0.0f };
+	DirectX::XMFLOAT3 position0 = { 0.0f,0.0f,0.0f };
+	DirectX::XMFLOAT3 position1 = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 rotation = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 scale = { 0.0f,0.5f,0.0f };
 
@@ -116,6 +125,14 @@ private:
 	};
 	//フェーズ
 	Phase2 phase2_ = Phase2::Approach;
+	int maxEnemyCount = 0;
+	bool isDead = false;
+	DirectX::XMFLOAT3 popPos = { 1000.0f,0.0f,0.0f };
+	float popRot = 0.0f;
+	int eventSlayCount = 0;
+
+	std::list<std::unique_ptr<SpritePop>> poppy;
+	std::list<std::unique_ptr<SpritePop>> transPop;
 
 public:
 	float GetTurning() { return turning; };

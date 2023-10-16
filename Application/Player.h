@@ -13,39 +13,43 @@
 class Player
 {
 public:
-
+	//Constructor ETC
 	Player() {};
-
 	~Player() {};
-	
+
 	void Initialize(FbxModel* model);
-	
 	void Update(XMFLOAT3 spline);
-	
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
+	//Player Movement Functions
 	void PlayerMove();
-
+	void TitleUpdate();
 	void CameraFollow();
-
-	void ShotStraightBullet();
-
 	void Rotate(XMFLOAT3 targetPos);
 	void PlayerRotate();
+
+	//Bullet
+	void ShotStraightBullet();
 	float Deg2Rad(float targetPos);
 
-
+	//Setters
 	static void SetDevice(ID3D12Device* device) { Player::device = device; }
 	static void SetCamera(Camera* camera) { Player::camera = camera; }
 	static void SetInput(Input* input) { Player::input = input; }
 	static void SetDXInput(DXInput* dxInput) { Player::dxInput = dxInput; }
-	void SetParent3d(XMFLOAT3* parent) { this->parent_ = parent; }
 
+	void SetParent3d(XMFLOAT3* parent) { this->parent_ = parent; }
 	void SetPosition0(DirectX::XMFLOAT3 pos) { position1 = pos; }
 	void SetPosition1(DirectX::XMFLOAT3 pos) { position0 = pos; }
 	void SetRotation0(DirectX::XMFLOAT3 rot) { rotation0 = rot; }
 	void SetScale0(DirectX::XMFLOAT3 sca) { scale0 = sca; }
 
+	void SetTitle();
+	void SetTutorial();
+	void SetStage();
+	void SetStage2();
+	void SetStage4();
+	//Getters
 	DirectX::XMFLOAT3 GetPosition0() { return position0; }
 	DirectX::XMFLOAT3 GetPosition1() { return position1; }
 	DirectX::XMFLOAT3 GetFinalPos() { return finalPos; }
@@ -54,19 +58,8 @@ public:
 	DirectX::XMFLOAT3 GetRotation0() { return rotation0; }
 	DirectX::XMFLOAT3 GetScale0() { return scale0; }
 
-	void SetCollisionFloor(DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 scale);
-	void SetCollisionObstacle(DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 scale);
-	void ClearCollision();
-
-	void UpdateCollision();
-
-	void SetTitle();
-	void SetTutorial();
-	void SetStage();
-	void SetStage2();
-	void SetStage4();
 private:
-
+	//statics
 	static ID3D12Device* device;
 
 	static Camera* camera;
@@ -81,7 +74,7 @@ private:
 
 	FbxModel* model1 = nullptr;
 	FbxObject3D* object1 = nullptr;
-
+	//movement
 	DirectX::XMFLOAT3 position0 = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 velocity0 = { 0.8f,0.8f,0.8f };
 	DirectX::XMFLOAT3 position1 = { 0.0f,0.5f,0.0f };
@@ -91,20 +84,14 @@ private:
 	DirectX::XMFLOAT3 rotation0 = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 finalRotation = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 scale0 = { 0.01f,0.01f,0.01f };
-
 	bool isRotZRight = true;
-
 	float swayZ = 0.0f;
-
 	static const XMFLOAT3 rotLimit;
 	XMFLOAT3 rot = { 0, 0, 0 };
-
 	const XMFLOAT3* parent_ = nullptr;
 	//std::list<std::unique_ptr<PlayerBullet>>bullets_;
-
-	std::list<std::unique_ptr<Collision>> collisionsFloor;
-	std::list<std::unique_ptr<Collision>> collisionsObstacle;
 	float rotation = 120;
+	//easing
 	float minFrame = 0.0f;
 	float frame = 0.0f;
 	float maxFrame = 6.20f;

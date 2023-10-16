@@ -39,7 +39,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	FbxLoader::GetInstance()->Initialize(dxCommon_->GetDevice());
 
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Arwing", "Resources/white1x1.png");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Arwing", "Resources/titleScreen/pastelorange.png");
 	model2 = FbxLoader::GetInstance()->LoadModelFromFile("Idle", "Resources/white1x1.png");
 	stoneModel = FbxLoader::GetInstance()->LoadModelFromFile("stone", "Resources/white1x1.png");
 	goalModel = FbxLoader::GetInstance()->LoadModelFromFile("goal", "Resources/portal.png");
@@ -103,36 +103,36 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 #pragma region Level Loader
 
-	jsonLoader = new JsonLoader();
-	jsonLoader->LoadFile("Resources/levels/test11.json");
-	for (int i = 0; i < jsonLoader->GetObjectDatas(); i++)
-	{
-		std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
-		
-		newObject->Initialize();
-		/*newObject->SetModel(model1);
-		newObject->PlayAnimation();*/
-		for (std::unique_ptr<FbxModel>& model : models)
-		{
-			if (jsonLoader->GetFileName(i) == model->GetFileName())
-			{
-				newObject->SetModel(model.get());
-			}
-		}
-		newObject->SetPosition(jsonLoader->GetPosition(i));
-		newObject->SetScale(jsonLoader->GetScale(i));
-		newObject->SetRotation(jsonLoader->GetRotation(i));
+	//jsonLoader = new JsonLoader();
+	//jsonLoader->LoadFile("Resources/levels/test10.json");
+	//for (int i = 0; i < jsonLoader->GetObjectDatas(); i++)
+	//{
+	//	std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
+	//	
+	//	newObject->Initialize();
+	//	/*newObject->SetModel(model1);
+	//	newObject->PlayAnimation();*/
+	//	for (std::unique_ptr<FbxModel>& model : models)
+	//	{
+	//		if (jsonLoader->GetFileName(i) == model->GetFileName())
+	//		{
+	//			newObject->SetModel(model.get());
+	//		}
+	//	}
+	//	newObject->SetPosition(jsonLoader->GetPosition(i));
+	//	newObject->SetScale(jsonLoader->GetScale(i));
+	//	newObject->SetRotation(jsonLoader->GetRotation(i));
 
-		start = { jsonLoader->GetPoint1(0) };
-		p2 = { jsonLoader->GetPoint2(0) };
-		p3 = { jsonLoader->GetPoint3(0) };
-		p4 = { jsonLoader->GetPoint4(0) };
-		end = { jsonLoader->GetPoint5(0) };
+	//	start = { jsonLoader->GetPoint1(0) };
+	//	p2 = { jsonLoader->GetPoint2(0) };
+	//	p3 = { jsonLoader->GetPoint3(0) };
+	//	p4 = { jsonLoader->GetPoint4(0) };
+	//	end = { jsonLoader->GetPoint5(0) };
 
-		objects.push_back(std::move(newObject));
-	}
+	//	objects.push_back(std::move(newObject));
+	//}
 	
-	points = { start,start,p2,p3,p4,end,end };
+	//points = { start,start,p2,p3,p4,end,end };
 #pragma endregion
 
 	SetTitle();
@@ -170,10 +170,12 @@ void GameScene::Update()
 		if (stage == Stage::Stage5)		SetStage5();
 		if (stage == Stage::Title)		SetTitle();
 	}
-
+	camera_->SetTarget({ 0,0,0 });
+	camera_->SetEye({ 0, 0, -70 });
 	preScene_ = scene_;
 	preStage = stage;
-	player->Update(cameraPosition);
+	player->TitleUpdate();
+	
 }
 
 void GameScene::Draw()
@@ -184,7 +186,7 @@ void GameScene::Draw()
 
 void GameScene::TitleUpdate()
 {
-	title->Update();
+	title->Update(model1,model1, dxCommon_->GetDevice());
 	if (input_->TriggerKey(DIK_0))stage = Stage::Tutorial;
 	if (input_->TriggerKey(DIK_1))stage = Stage::Stage1;
 	if (input_->TriggerKey(DIK_2))stage = Stage::Stage2;
@@ -193,11 +195,12 @@ void GameScene::TitleUpdate()
 	if (input_->TriggerKey(DIK_5))stage = Stage::Stage5;
 	if (input_->TriggerKey(DIK_9))stage = Stage::Title;
 	camera_->DebugUpdate();
-
-	for (std::unique_ptr<FbxObject3D>& object0 : objects)
+	/*camera_->SetTarget(XMFLOAT3{ player->GetPosition0().x , player->GetPosition0().y, player->GetPosition0().z  });
+	camera_->SetEye(XMFLOAT3{ player->GetPosition0().x + 20,player->GetPosition0().y + 5.0f, player->GetPosition0().z });*/
+	/*for (std::unique_ptr<FbxObject3D>& object0 : objects)
 	{
 		object0->Update();
-	}
+	}*/
 	//camera_->Update();
 	if (stage == Stage::Tutorial) {
 		scene_ = static_cast<size_t>(Scene::Game);
@@ -208,28 +211,27 @@ void GameScene::TitleUpdate()
 
 void GameScene::TitleDraw()
 {
-	/*for (std::unique_ptr<FbxObject3D>& object0 : objects)
+	for (std::unique_ptr<FbxObject3D>& object0 : objects)
 	{
 		object0->Draw(dxCommon_->GetCommandList());
-	}*/
-	//player->Draw(dxCommon_->GetCommandList());
+	}
+	
 	title->Draw(dxCommon_->GetCommandList(), dxCommon_->GetDevice());
+	player->Draw(dxCommon_->GetCommandList());
 }
 
 void GameScene::GameUpdate()
 {
-	title->Transition();
+	title->Transition(dxCommon_->GetDevice());
 	//camera_->DebugUpdate();
-	eye_ = spline_.Update(points, timeRate);
-	cameraPosition = spline_.Update(points, timeRate);
-	camera_->SetTarget(XMFLOAT3{ player->GetPosition0().x + cameraPosition.x, player->GetPosition0().y + cameraPosition.y, player->GetPosition0().z + cameraPosition.z });
-	camera_->SetEye(XMFLOAT3{ player->GetPosition0().x + cameraPosition.x + 20,player->GetPosition0().y + cameraPosition.y + 5.0f, player->GetPosition0().z + cameraPosition.z });
-	for (std::unique_ptr<FbxObject3D>& object0 : objects)
+	//eye_ = spline_.Update(points, timeRate);
+	//cameraPosition = spline_.Update(points, timeRate);
+	//camera_->SetTarget(XMFLOAT3{ player->GetPosition0().x + cameraPosition.x, player->GetPosition0().y + cameraPosition.y, player->GetPosition0().z + cameraPosition.z });
+	//camera_->SetEye(XMFLOAT3{ player->GetPosition0().x + cameraPosition.x + 20,player->GetPosition0().y + cameraPosition.y + 5.0f, player->GetPosition0().z + cameraPosition.z });
+	/*for (std::unique_ptr<FbxObject3D>& object0 : objects)
 	{
 		object0->Update();
-	}
-
-	//player->Update({ 0.0f,0.5f,0.0f });
+	}*/
 
 	if (stage == Stage::Title) {
 		scene_ = static_cast<size_t>(Scene::Title);
@@ -242,58 +244,61 @@ void GameScene::GameUpdate()
 
 void GameScene::GameDraw()
 {
-	for (std::unique_ptr<FbxObject3D>& object0 : objects)
-	{
-		object0->Draw(dxCommon_->GetCommandList());
-	}
-	player->Draw(dxCommon_->GetCommandList());
+	//for (std::unique_ptr<FbxObject3D>& object0 : objects)
+	//{
+	//	object0->Draw(dxCommon_->GetCommandList());
+	//}
+	//player->Draw(dxCommon_->GetCommandList());
 	title->GameDraw(dxCommon_->GetCommandList(), dxCommon_->GetDevice());
 }
 
 void GameScene::SetTitle()
 {
 	timeRate = 0;
-	
-	points = { start,start,p2,p3,p4,end,end };
+	//title->ModelDraw(dxCommon_->GetDevice());
+	//title->TransitionPop(dxCommon_->GetDevice());
+	//points = { start,start,p2,p3,p4,end,end };
+
 }
 
 void GameScene::SetTutorial()
 {
 	
-	timeRate = 0;
-	//player->SetTutorial();
+	//title->TransitionPop(dxCommon_->GetDevice());
+	//timeRate = 0;
+	////player->SetTutorial();
 
-	jsonLoader = new JsonLoader();
-	jsonLoader->LoadFile("Resources/levels/test12.json");
-	
-	for (int i = 0; i < jsonLoader->GetObjectDatas(); i++)
-	{
-		std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
-		
-		newObject->Initialize();
-		/*newObject->SetModel(model1);
-		newObject->PlayAnimation();*/
-		for (std::unique_ptr<FbxModel>& model : models)
-		{
-			if (jsonLoader->GetFileName(i) == model->GetFileName())
-			{
-				newObject->SetModel(model.get());
-			}
-		}
-		newObject->SetPosition(jsonLoader->GetPosition(i));
-		newObject->SetScale(jsonLoader->GetScale(i));
-		newObject->SetRotation(jsonLoader->GetRotation(i));
+	//jsonLoader = new JsonLoader();
+	//jsonLoader->LoadFile("Resources/levels/test12.json");
+	//
+	//for (int i = 0; i < jsonLoader->GetObjectDatas(); i++)
+	//{
+	//	std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
+	//	
+	//	newObject->Initialize();
+	//	/*newObject->SetModel(model1);
+	//	newObject->PlayAnimation();*/
+	//	for (std::unique_ptr<FbxModel>& model : models)
+	//	{
+	//		if (jsonLoader->GetFileName(i) == model->GetFileName())
+	//		{
+	//			newObject->SetModel(model.get());
+	//		}
+	//	}
+	//	newObject->SetPosition(jsonLoader->GetPosition(i));
+	//	newObject->SetScale(jsonLoader->GetScale(i));
+	//	newObject->SetRotation(jsonLoader->GetRotation(i));
 
-		start = { jsonLoader->GetPoint1(0) };
-		p2 = { jsonLoader->GetPoint2(0) };
-		p3 = { jsonLoader->GetPoint3(0) };
-		p4 = { jsonLoader->GetPoint4(0) };
-		end = { jsonLoader->GetPoint5(0) };
+	//	start = { jsonLoader->GetPoint1(0) };
+	//	p2 = { jsonLoader->GetPoint2(0) };
+	//	p3 = { jsonLoader->GetPoint3(0) };
+	//	p4 = { jsonLoader->GetPoint4(0) };
+	//	end = { jsonLoader->GetPoint5(0) };
 
-		objects.push_back(std::move(newObject));
-	}
+	//	objects.push_back(std::move(newObject));
+	//}
 
-	points = { start,start,p2,p3,p4,end,end };
+	//points = { start,start,p2,p3,p4,end,end };
 
 	//spline_.Update(points, timeRate);
 }

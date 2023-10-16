@@ -90,9 +90,6 @@
     <ClCompile Include="fbx\FbxObject3D.cpp">
       <Filter>ソース ファイル\base\3D\fbx</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Collision.cpp">
-      <Filter>ソース ファイル\base\3D</Filter>
-    </ClCompile>
     <ClCompile Include="math\Math2.cpp">
       <Filter>ヘッダー ファイル\gameObject\math</Filter>
     </ClCompile>
@@ -147,6 +144,12 @@
     <ClCompile Include="base\MathFunc.cpp">
       <Filter>ヘッダー ファイル\gameObject\math</Filter>
     </ClCompile>
+    <ClCompile Include="base\3D\Collision.cpp">
+      <Filter>ソース ファイル\base\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\SpritePop.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\DirectXCommon.h">
@@ -175,9 +178,6 @@
     </ClInclude>
     <ClInclude Include="fbx\FbxObject3D.h">
       <Filter>ヘッダー ファイル\base\3D\fbx</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Collision.h">
-      <Filter>ヘッダー ファイル\base\3D</Filter>
     </ClInclude>
     <ClInclude Include="math\Math2.h">
       <Filter>ヘッダー ファイル\base\math</Filter>
@@ -229,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="base\MathFunc.h">
       <Filter>ヘッダー ファイル\base\math</Filter>
+    </ClInclude>
+    <ClInclude Include="base\3D\Collision.h">
+      <Filter>ヘッダー ファイル\base\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\SpritePop.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

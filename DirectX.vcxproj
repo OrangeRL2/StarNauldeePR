@@ -154,7 +154,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="3D\Collision.cpp" />
     <ClCompile Include="base\AudioManager.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\DXInput.cpp" />
@@ -165,6 +164,7 @@
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="base\Camera.cpp" />
     <ClCompile Include="base\CircleShadow.cpp" />
+    <ClCompile Include="base\3D\Collision.cpp" />
     <ClCompile Include="fbx\FbxLoader.cpp" />
     <ClCompile Include="fbx\FbxModel.cpp" />
     <ClCompile Include="fbx\FbxObject3D.cpp" />
@@ -182,9 +182,9 @@
     <ClCompile Include="Application\RailCamera.cpp" />
     <ClCompile Include="Application\Spline.cpp" />
     <ClCompile Include="Application\TitleManager.cpp" />
+    <ClCompile Include="Application\SpritePop.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3D\Collision.h" />
     <ClInclude Include="base\AudioManager.h" />
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="base\DXInput.h" />
@@ -195,6 +195,7 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="base\Camera.h" />
     <ClInclude Include="base\CircleShadow.h" />
+    <ClInclude Include="base\3D\Collision.h" />
     <ClInclude Include="fbx\FbxLoader.h" />
     <ClInclude Include="fbx\FbxModel.h" />
     <ClInclude Include="fbx\FbxObject3D.h" />
@@ -211,6 +212,7 @@
     <ClInclude Include="Application\RailCamera.h" />
     <ClInclude Include="Application\Spline.h" />
     <ClInclude Include="Application\TitleManager.h" />
+    <ClInclude Include="Application\SpritePop.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

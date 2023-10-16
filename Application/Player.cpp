@@ -13,6 +13,7 @@ void Player::Initialize(FbxModel* model)
 }
 void Player::Update(XMFLOAT3 spline)
 {
+	scale0 = { 0.01f,0.01f,0.01f };
 	PlayerRotate();
 	PlayerMove();
 	//UpdateCollision();
@@ -51,7 +52,7 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void Player::PlayerMove()
 {
-
+	//player movement
 	if (input->PushKey(DIK_W))
 	{
 
@@ -62,7 +63,7 @@ void Player::PlayerMove()
 	}
 	if (input->PushKey(DIK_S))
 	{
-		if (position0.y >= -11.0f) {
+		if (position0.y >= -21.0f) {
 			position0.y -= velocity0.y;
 			centerpos.y -= 0.4f;
 			rotation0.z += 0.05f;
@@ -106,34 +107,9 @@ void Player::PlayerMove()
 
 }
 
-void Player::CameraFollow()
-{
-
-	//XMFLOAT3 velocity = { 0, 0, 0 };
-	//velocity.x = 0.4 * (rotation0.y / rotLimit.y);
-	//velocity.y = 0.4 * -(rotation0.x / rotLimit.x);
-	//position0.x += velocity.x;
-	//position0.y += velocity.y;
-	//position0.z += velocity.z;
-}
-
-void Player::Rotate(XMFLOAT3 targetPos)
-{
-	//Quaternion q;
-
-	//targetPos = XMFLOAT3(10, 10000, 1);
-	//q.RotateTowards(XMFLOAT4{0,0,0,0}, 10);
-	//
-
-	//rotation0.y = max(rotation0.y, -rotLimit.y);
-	//rotation0.y = min(rotation0.y, +rotLimit.y);
-	//rotation0.x = max(rotation0.x, -rotLimit.x);
-	//rotation0.x = min(rotation0.x, +rotLimit.x);
-}
-
 void Player::ShotStraightBullet()
 {
-
+	//bullet
 	//	const float bulletSpeed = 6;
 	//
 
@@ -146,78 +122,10 @@ void Player::ShotStraightBullet()
 
 }
 
-void Player::UpdateCollision()
-{
-	DirectX::XMFLOAT3 Min = {
-		finalPos.x - scale0.x,
-		finalPos.y - scale0.y,
-		finalPos.z - scale0.z };
-	DirectX::XMFLOAT3 Max = {
-		finalPos.x + scale0.x,
-		finalPos.y + scale0.y,
-		finalPos.z + scale0.z };
-
-	for (std::unique_ptr<Collision>& collision : collisionsObstacle)
-	{
-
-		if (-2 + finalPos.x <= Max.x - collision->GetMin().x && Max.x - collision->GetMin().x <= 2 + finalPos.x)
-		{
-			while (collision->Update(finalPos, scale0) == 1)
-			{
-				finalPos.x = 0.0002f;
-			}
-		}
-
-		if (-2 + finalPos.x <= Min.x - collision->GetMax().x && Min.x - collision->GetMax().x <= 2 + finalPos.x)
-		{
-			while (collision->Update(finalPos, scale0) == 1)
-			{
-				finalPos.x += 0.0002f;
-			}
-		}
-
-		if (-2 + finalPos.z <= Max.z - collision->GetMin().z && Max.z - collision->GetMin().z <= 2 + finalPos.z)
-		{
-			while (collision->Update(finalPos, scale0) == 1)
-			{
-				finalPos.z -= 0.0002f;
-
-			}
-		}
-
-		if (-2 + finalPos.z <= Min.z - collision->GetMax().z && Min.z - collision->GetMax().z <= 2 + finalPos.z)
-		{
-			while (collision->Update(finalPos, scale0) == 1)
-			{
-				finalPos.z += 0.0002f;
-			}
-		}
-
-
-	}
-}
-
-void Player::SetCollisionObstacle(DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 scale)
-{
-	std::unique_ptr<Collision>newCollision = std::make_unique<Collision>();
-	newCollision->SetObject(position, scale);
-	collisionsObstacle.push_back(std::move(newCollision));
-}
-
-void Player::SetCollisionFloor(DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 scale)
-{
-	std::unique_ptr<Collision>newCollision = std::make_unique<Collision>();
-	newCollision->SetObject(position, scale);
-	collisionsFloor.push_back(std::move(newCollision));
-}
-
-void Player::ClearCollision()
-{
-	collisionsObstacle.clear();
-	collisionsFloor.clear();
-}
 void Player::PlayerRotate()
 {
+	//player barrel roll
+
 	float ap = MathFunc::easeInOutSine(6.3f - minFrame);
 	if (rotateFlag == 0) {
 		if (input->PushKey(DIK_P))
@@ -249,7 +157,7 @@ void Player::PlayerRotate()
 
 void Player::SetTitle()
 {
-	object0->SetPosition(finalPos);
+	object0->SetPosition(position0);
 	object0->SetScale({ scale0 });
 	object0->SetRotation({ finalRotation });
 }
@@ -259,4 +167,45 @@ void Player::SetTutorial()
 	object0->SetPosition(finalPos);
 	object0->SetScale({ scale0 });
 	object0->SetRotation({ finalRotation });
+	scale0 = { 0.01f,0.01f,0.01f };
+}
+
+void Player::TitleUpdate()
+{
+	//title screen movement
+	static int time[4] = { 150,100,50,0 };
+	static int timespd[4] = { 1,1,1,1 };
+	for (int i = 0; i < 4; i++)
+	{
+		time[i] += timespd[i];
+		if (time[i] >= 360 || time[i] <= 0)
+		{
+			timespd[i] = -timespd[i];
+		}
+	}
+
+	position0.x -= 0.5f;
+	if (position0.x < -100.0f) {
+		position0.x = 100.0f;
+	}
+	scale0 = { 0.05f,0.05f,0.05f };
+	//position0.z = -50.0f;
+	object0->SetPosition(position0);
+	finalRotation = XMFLOAT3{ frame + rotation0.x,
+								0 + rotation0.y ,
+								0 + rotation0.z };
+	
+	object0->SetScale({ scale0 });
+	object0->SetRotation({ finalRotation });
+	PlayerMove();
+	PlayerRotate();
+	//if (rotateFlag == 0) {
+	//	if (input->PushKey(DIK_W))
+	//	{
+	//		rotateFlag = 1;
+	//	}
+	//}
+	object0->Update();
+	/*position0.y += cosf(MathFunc::DegreeConversionRad(time[0])*0.1);*/
+	//position0.z=
 }

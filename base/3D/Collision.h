@@ -7,7 +7,7 @@ private:
 
 	struct CubeVertex
 	{
-		DirectX::XMFLOAT3 c;	
+		DirectX::XMFLOAT3 c;
 		//DirectX::XMFLOAT3 v[8];
 		DirectX::XMFLOAT3 min;	//-x,-y,-z
 		DirectX::XMFLOAT3 max;	//x,y,z
@@ -23,7 +23,7 @@ private:
 public:
 	//Set objects for collision detection (rectangle and sphere)
 	void SetObject(DirectX::XMFLOAT3 cubePos, DirectX::XMFLOAT3 cubeScale);
-	
+
 	bool Update(DirectX::XMFLOAT3 spherePos, DirectX::XMFLOAT3 sphereScale);
 
 	//Getter

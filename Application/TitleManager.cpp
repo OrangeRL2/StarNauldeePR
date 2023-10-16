@@ -9,10 +9,12 @@ Input* TitleManager::input = nullptr;
 DXInput* TitleManager::dxInput = nullptr;
 void TitleManager::Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* dev)
 {
+	ModelDraw(dev);
+	TransitionPop(dev);
 	arwingObject = new FbxObject3D;
 	arwingObject->Initialize();
 	arwingObject->SetModel(model);
-	
+
 	foxObject = new FbxObject3D;
 	foxObject->Initialize();
 	foxObject->SetModel(model2);
@@ -29,13 +31,15 @@ void TitleManager::Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* d
 	sprite->SpriteCommonLoadTexture(spriteCommon, 6, L"Resources/titleScreen/T2.png", dev);
 
 	sprite->SpriteCommonLoadTexture(spriteCommon, 7, L"Resources/titleScreen/handle2.png", dev);
-	sprite->SpriteCommonLoadTexture(spriteCommon, 8, L"Resources/titleScreen/titleImage.png", dev);
+	sprite->SpriteCommonLoadTexture(spriteCommon, 8, L"Resources/titleScreen/titleImage2.png", dev);
+	sprite->SpriteCommonLoadTexture(spriteCommon, 9, L"Resources/titleScreen/pastelblue3.png", dev);
+	sprite->SpriteCommonLoadTexture(spriteCommon, 10, L"Resources/titleScreen/Controls.png", dev);
 
 
 	titleSprite.SpriteCreate(dev, 1280, 720);
 	titleSprite.SetTexNumber(0);
 	titleSprite.SetPosition(XMFLOAT3(0, 0, 0));
-	titleSprite.SetScale(XMFLOAT2(1280, 720));
+	titleSprite.SetScale(XMFLOAT2(1280, 730));
 
 	titleSprite2.SpriteCreate(dev, 1280, 720);
 	titleSprite2.SetTexNumber(0);
@@ -57,38 +61,53 @@ void TitleManager::Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* d
 
 	T.SpriteCreate(dev, 1280, 720);
 	T.SetTexNumber(3);
-	T.SetPosition(XMFLOAT3(600 - 20,602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
+	T.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
 	T.SetScale(XMFLOAT2(120.0f * 1.3f, 120.0f * 1.3f));
 
 	A.SpriteCreate(dev, 1280, 720);
 	A.SetTexNumber(4);
-	A.SetPosition(XMFLOAT3(600 - 20,602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
+	A.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
 	A.SetScale(XMFLOAT2(120.0f * 1.3f, 120.0f * 1.3f));
 
 	R.SpriteCreate(dev, 1280, 720);
 	R.SetTexNumber(5);
-	R.SetPosition(XMFLOAT3(600 - 20,602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
+	R.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
 	R.SetScale(XMFLOAT2(120.0f * 1.3f, 120.0f * 1.3f));
 
 	T2.SpriteCreate(dev, 1280, 720);
 	T2.SetTexNumber(6);
-	T2.SetPosition(XMFLOAT3(600 - 20,602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
+	T2.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
 	T2.SetScale(XMFLOAT2(120.0f * 1.3f, 120.0f * 1.3f));
 
 	handle.SpriteCreate(dev, 1280, 720);
 	handle.SetTexNumber(7);
-	handle.SetPosition(XMFLOAT3(0,0,0));
+	handle.SetPosition(XMFLOAT3(0, 0, 0));
 	handle.SetScale({ 200 * 1.3f, 200 * 1.3f });
 
 	titleImage.SpriteCreate(dev, 1280, 720);
 	titleImage.SetTexNumber(8);
 	titleImage.SetPosition(XMFLOAT3(0, 0, 0));
 	titleImage.SetScale({ 300 * 1.3f, 300 * 1.3f });
+
+	controlImage.SpriteCreate(dev, 1280, 720);
+	controlImage.SetTexNumber(10);
+	controlImage.SetPosition(XMFLOAT3(900, 400, 0));
+	controlImage.SetScale({ 300 * 1.3f, 300 * 1.3f });
+
+
 #pragma endregion
 }
 
-void TitleManager::Update()
+void TitleManager::Update(FbxModel* model, FbxModel* model2, ID3D12Device* dev)
 {
+	for (std::unique_ptr<SpritePop>& enemy : poppy)
+	{
+		enemy->PopUpdate();
+	}
+	for (std::unique_ptr<SpritePop>& enemy2 : transPop)
+	{
+		enemy2->revival();
+	}
 	static int time[4] = { 150,100,50,0 };
 	static int timespd[4] = { 1,1,1,1 };
 	for (int i = 0; i < 4; i++)
@@ -119,15 +138,20 @@ void TitleManager::Update()
 		break;
 	}
 
-	S.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
-	T.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
-	A.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
-	R.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
-	T2.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f, 0));
-	
-	handle.SetPosition(XMFLOAT3(40,30 + cosf(MathFunc::DegreeConversionRad(time[0])) * 15.0f,0));
-	titleImage.SetPosition(XMFLOAT3(40, -20 + cosf(MathFunc::DegreeConversionRad(time[0])) * 15.0f, 0));
-	
+	if (position.y >= 0) {
+		position.y -= 10.0f;
+	}
+
+	titleSprite.SetPosition(position);
+	S.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f + position.y, 0));
+	T.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f + position.y, 0));
+	A.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f + position.y, 0));
+	R.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f + position.y, 0));
+	T2.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f + position.y, 0));
+
+	handle.SetPosition(XMFLOAT3(40, 30 + cosf(MathFunc::DegreeConversionRad(time[0])) * 15.0f + position.y, 0));
+	titleImage.SetPosition(XMFLOAT3(40, -20 + cosf(MathFunc::DegreeConversionRad(time[0])) * 15.0f + position.y, 0));
+
 	S.SetRotation(turning * 3);
 	T.SetRotation(turning - 0.0003f * 1.5f);
 	A.SetRotation(turning * 5);
@@ -149,8 +173,15 @@ void TitleManager::Update()
 	arwingObject->SetRotation(rotation);
 	arwingObject->SetScale(scale);
 	arwingObject->Update();
+
+	/*poppy.remove_if([](std::unique_ptr<SpritePop>& enemy) {
+		return enemy->IsDead();
+		});*/
+	/*transPop.remove_if([](std::unique_ptr<SpritePop>& enemy) {
+		return enemy->IsDead();
+		});*/
 }
-void TitleManager::Draw(ID3D12GraphicsCommandList* cmdList,ID3D12Device* dev)
+void TitleManager::Draw(ID3D12GraphicsCommandList* cmdList, ID3D12Device* dev)
 {
 	arwingObject->Draw(cmdList);
 
@@ -159,6 +190,11 @@ void TitleManager::Draw(ID3D12GraphicsCommandList* cmdList,ID3D12Device* dev)
 	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
 	titleSprite.SpriteDraw(cmdList, spriteCommon, dev, titleSprite.vbView);
 
+	for (std::unique_ptr<SpritePop>& enemy : poppy)
+	{
+		enemy->PopDraw(cmdList, dev);
+	}
+
 	handle.SpriteTransferVertexBuffer(handle);
 	handle.SpriteUpdate(handle, spriteCommon);
 	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
@@ -195,6 +231,12 @@ void TitleManager::Draw(ID3D12GraphicsCommandList* cmdList,ID3D12Device* dev)
 	T2.SpriteDraw(cmdList, spriteCommon, dev, T2.vbView);
 
 	arwingObject->Draw(cmdList);
+
+
+	controlImage.SpriteTransferVertexBuffer(controlImage);
+	controlImage.SpriteUpdate(controlImage, spriteCommon);
+	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
+	controlImage.SpriteDraw(cmdList, spriteCommon, dev, controlImage.vbView);
 }
 void TitleManager::GameDraw(ID3D12GraphicsCommandList* cmdList, ID3D12Device* dev)
 {
@@ -203,6 +245,18 @@ void TitleManager::GameDraw(ID3D12GraphicsCommandList* cmdList, ID3D12Device* de
 	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
 	titleSprite2.SpriteDraw(cmdList, spriteCommon, dev, titleSprite2.vbView);
 
+	for (std::unique_ptr<SpritePop>& enemy : poppy)
+	{
+		if (enemy->IsDead() == false) {
+		enemy->PopDraw(cmdList, dev);
+		}
+	}
+	for (std::unique_ptr<SpritePop>& enemy2 : transPop)
+	{
+		if (enemy2->IsDead() == false) {
+		enemy2->PopDraw(cmdList, dev);
+	}
+	}
 	handle.SpriteTransferVertexBuffer(handle);
 	handle.SpriteUpdate(handle, spriteCommon);
 	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
@@ -239,8 +293,8 @@ void TitleManager::GameDraw(ID3D12GraphicsCommandList* cmdList, ID3D12Device* de
 	T2.SpriteDraw(cmdList, spriteCommon, dev, T2.vbView);
 }
 
-void TitleManager::Transition()
-{
+void TitleManager::Transition(ID3D12Device* dev)
+{ 
 	static int time[4] = { 150,100,50,0 };
 	static int timespd[4] = { 1,1,1,1 };
 	for (int i = 0; i < 4; i++)
@@ -252,29 +306,28 @@ void TitleManager::Transition()
 		}
 	}
 
-	if (position.x <= 1100) {
-		position.x += 10.5f;
+	if (position.y <= 1000) {
+		position.y += 10.5f;
 	}
-	if (position.x >= 1100) {
-		position.x += 2.5f;
-	}
-	position.y = cosf(MathFunc::DegreeConversionRad(time[0])) * 1.5f;
+	/*if (position.y >= 500) {
+		position.y += 10.5f;
+	}*/
+	//position.y = cosf(MathFunc::DegreeConversionRad(time[0])) * 1.5f;
 	/*if (position.x > 1400.0f) {
 		position.x = -1205.0f;
 	}*/
 	titleSprite2.SetPosition(position);
 
-	
 	position0.y -= 2.5f;
-	position1.y += 3.5f;
-	S.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
-	T.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
-	A.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
-	R.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
-	T2.SetPosition(XMFLOAT3(600 - 20, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
+	position1.y -= 10.5f;
+	S.SetPosition(XMFLOAT3(600 - 20 - position0.x, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
+	T.SetPosition(XMFLOAT3(600 - 20 - position0.x, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
+	A.SetPosition(XMFLOAT3(600 - 20 - position0.x, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
+	R.SetPosition(XMFLOAT3(600 - 20 - position0.x, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
+	T2.SetPosition(XMFLOAT3(600 - 20 - position0.x, 602 - 40 + cosf(MathFunc::DegreeConversionRad(time[0])) * 10.0f - position0.y, 0));
 
-	handle.SetPosition(XMFLOAT3(40, 30 + cosf(MathFunc::DegreeConversionRad(time[0])) * 15.0f - position1.y, 0));
-	titleImage.SetPosition(XMFLOAT3(40, -20 + cosf(MathFunc::DegreeConversionRad(time[0])) * 15.0f - position1.y, 0));
+	handle.SetPosition(XMFLOAT3(40 - position1.x, 30 + cosf(MathFunc::DegreeConversionRad(time[0])) * 15.0f + position.y, 0));
+	titleImage.SetPosition(XMFLOAT3(40 - position1.x, -20 + cosf(MathFunc::DegreeConversionRad(time[0])) * 15.0f + position.y, 0));
 
 	S.SetRotation(turning * 3);
 	T.SetRotation(turning - 0.0003f * 1.5f);
@@ -284,22 +337,54 @@ void TitleManager::Transition()
 
 	handle.SetRotation({ 5.4f - turning * 3 });
 	titleImage.SetRotation({ 2.4f - turning * 3 });
+
+	for (std::unique_ptr<SpritePop>& enemy2 : transPop)
+	{
+		enemy2->PopTransition();
+	}
+
+	for (std::unique_ptr<SpritePop>& enemy : poppy)
+	{
+		enemy->PopCollision();
+	}
+
+	/*poppy.remove_if([](std::unique_ptr<SpritePop>& enemy) {
+		return enemy->IsDead();
+		});*/
+	/*transPop.remove_if([](std::unique_ptr<SpritePop>& enemy) {
+		return enemy->IsDead();
+		});*/
 }
 
-void TitleManager::ModelDraw()
+void TitleManager::ModelDraw(ID3D12Device* dev)
 {
-
+	for(int i = 0; i < 50; i++) {
+		PopInit(dev);
+	}
 }
-void TitleManager::BackDraw()
+void TitleManager::PopInit(ID3D12Device* dev)
 {
-	
+	std::unique_ptr<SpritePop> newEnemy = std::make_unique<SpritePop>();
+	//rotation += RNG(-0.04, 0.04);
+	newEnemy->PopInit(dev);
+
+	//敵を登録する
+	poppy.push_back(std::move(newEnemy));
 }
 
-void TitleManager::TitleFrontDraw()
+void TitleManager::PopTransInit(ID3D12Device* dev)
 {
+	std::unique_ptr<SpritePop> newEnemy2 = std::make_unique<SpritePop>();
+	//rotation += RNG(-0.04, 0.04);
+	newEnemy2->PopTransInit(dev);
 
+	//敵を登録する
+	transPop.push_back(std::move(newEnemy2));
 }
-void TitleManager::WinDraw()
-{
 
+void TitleManager::TransitionPop(ID3D12Device* dev)
+{
+	for(int i = 0; i <= 200; i++) {
+		PopTransInit(dev);
+	}
 }
