@@ -20,43 +20,28 @@ class TitleManager
 {
 public:
 	void Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* dev);
+
+	
+	//Title
 	void Update(FbxModel* model, FbxModel* model2, ID3D12Device* dev);
 	void Draw(ID3D12GraphicsCommandList* cmdList_,ID3D12Device* dev);
-
-	void End();
-
-	void BackDraw();
-	void TitleFrontDraw();
-	void WinDraw();
-	void StartDraw();
+	//Game
 	void GameDraw(ID3D12GraphicsCommandList* cmdList_, ID3D12Device* dev);
-	//void ThanksForPlayingText();
 	void ModelDraw(ID3D12Device* dev);
-
 	void Transition(ID3D12Device* dev);
 	void PopInit(ID3D12Device* dev);
 	void PopTransInit(ID3D12Device* dev);
 	void TransitionPop(ID3D12Device* dev);
-
-	bool IsTitle() { return isTitle; };
-
+	void TransitionReset();
+	//Setters
 	void SetPosition(DirectX::XMFLOAT3 pos) { position = pos; }
 	void SetRotation(DirectX::XMFLOAT3 rot) { rotation = rot; }
 	void SetScale(DirectX::XMFLOAT3 sca) { scale = sca; }
-
-	//void NotTitle() { isTitle = false; };
-	void TitleBack() { isTitle = true; };
-
 	static void SetDevice(ID3D12Device* device) { TitleManager::device = device; }
 	static void SetCamera(Camera* camera) { TitleManager::camera = camera; }
 	static void SetInput(Input* input) { TitleManager::input = input; }
 	static void SetDXInput(DXInput* dxInput) { TitleManager::dxInput = dxInput; }
-	bool IsDead() { return isDead; }
-
-	bool isTitle = true;
-
-	bool endflag = false;
-
+	
 private:
 	static ID3D12Device* device;
 
@@ -66,7 +51,7 @@ private:
 
 	static DXInput* dxInput;
 private:
-	
+	//Sprite
 	Sprite* sprite = new Sprite;
 	Sprite titleSprite;	//title.png
 	Sprite titleSprite2;	//title.png
@@ -86,6 +71,9 @@ private:
 	Sprite starSprite;//star.png
 	Sprite arwingSprite;//arwing.png
 
+	Sprite start;//START.png
+	Sprite level1;//LEVEL1.png
+
 	SpriteCommon spriteCommon;
 
 	//fbx
@@ -98,6 +86,7 @@ private:
 	FbxModel* frogModel = nullptr;
 	FbxObject3D* frogObject = nullptr;
 
+	//Variables
 	float oldHori = 0;
 	float horizontalRotation = 0;
 
@@ -118,6 +107,8 @@ private:
 	DirectX::XMFLOAT3 position1 = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 rotation = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 scale = { 0.0f,0.5f,0.0f };
+	DirectX::XMFLOAT3 startPos = { 200.0f,-2600.0f+400.0f,0.0f };
+	DirectX::XMFLOAT3 levelPos = { 200.0f,-2000.0f+400.0f,0.0f };
 
 	enum class Phase2 {
 		Approach,//接近する
@@ -134,7 +125,14 @@ private:
 	std::list<std::unique_ptr<SpritePop>> poppy;
 	std::list<std::unique_ptr<SpritePop>> transPop;
 
+	bool isTitle = true;
+	bool endflag = false;
+	bool gameStartFlag = false;
 public:
 	float GetTurning() { return turning; };
+	void TitleBack() { isTitle = true; };
+	bool IsTitle() { return isTitle; };
+	bool IsDead() { return isDead; }
+	bool GetStartFlag() { return gameStartFlag; }
 };
 

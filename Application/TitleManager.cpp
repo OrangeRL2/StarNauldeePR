@@ -34,6 +34,8 @@ void TitleManager::Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* d
 	sprite->SpriteCommonLoadTexture(spriteCommon, 8, L"Resources/titleScreen/titleImage2.png", dev);
 	sprite->SpriteCommonLoadTexture(spriteCommon, 9, L"Resources/titleScreen/pastelblue3.png", dev);
 	sprite->SpriteCommonLoadTexture(spriteCommon, 10, L"Resources/titleScreen/Controls.png", dev);
+	sprite->SpriteCommonLoadTexture(spriteCommon, 11, L"Resources/titleScreen/LEVEL1.png", dev);
+	sprite->SpriteCommonLoadTexture(spriteCommon, 12, L"Resources/titleScreen/Start.png", dev);
 
 
 	titleSprite.SpriteCreate(dev, 1280, 720);
@@ -94,6 +96,15 @@ void TitleManager::Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* d
 	controlImage.SetPosition(XMFLOAT3(900, 400, 0));
 	controlImage.SetScale({ 300 * 1.3f, 300 * 1.3f });
 
+	level1.SpriteCreate(dev, 720, 720);
+	level1.SetTexNumber(11);
+	level1.SetPosition(XMFLOAT3(0, 0, 0));
+	level1.SetScale(XMFLOAT2(720, 720));
+
+	start.SpriteCreate(dev, 720, 720);
+	start.SetTexNumber(12);
+	start.SetPosition(XMFLOAT3(0, 0, 0));
+	start.SetScale(XMFLOAT2(720, 720));
 
 #pragma endregion
 }
@@ -291,6 +302,16 @@ void TitleManager::GameDraw(ID3D12GraphicsCommandList* cmdList, ID3D12Device* de
 	T2.SpriteUpdate(T2, spriteCommon);
 	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
 	T2.SpriteDraw(cmdList, spriteCommon, dev, T2.vbView);
+
+	level1.SpriteTransferVertexBuffer(level1);
+	level1.SpriteUpdate(level1, spriteCommon);
+	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
+	level1.SpriteDraw(cmdList, spriteCommon, dev, level1.vbView);
+
+	start.SpriteTransferVertexBuffer(start);
+	start.SpriteUpdate(start, spriteCommon);
+	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
+	start.SpriteDraw(cmdList, spriteCommon, dev, start.vbView);
 }
 
 void TitleManager::Transition(ID3D12Device* dev)
@@ -337,6 +358,31 @@ void TitleManager::Transition(ID3D12Device* dev)
 
 	handle.SetRotation({ 5.4f - turning * 3 });
 	titleImage.SetRotation({ 2.4f - turning * 3 });
+
+	if (startPos.y <= 0) {
+		startPos.y += 10.0f;
+	}
+	if (startPos.y >= 0) {
+		startPos.y += 3.0f;
+	}
+	if (startPos.y >= 200) {
+		startPos.y += 15.0f;
+	}
+	if (startPos.y >= 1000) {
+		gameStartFlag = true;
+	}
+	if (levelPos.y <= 0) {
+		levelPos.y += 10.0f;
+	}
+	if (levelPos.y >= 0) {
+		levelPos.y += 3.0f;
+	}
+	if (levelPos.y >= 200) {
+		levelPos.y += 15.0f;
+	}
+	
+	start.SetPosition(XMFLOAT3(startPos));
+	level1.SetPosition(XMFLOAT3(levelPos));
 
 	for (std::unique_ptr<SpritePop>& enemy2 : transPop)
 	{
@@ -387,4 +433,10 @@ void TitleManager::TransitionPop(ID3D12Device* dev)
 	for(int i = 0; i <= 200; i++) {
 		PopTransInit(dev);
 	}
+}
+void TitleManager::TransitionReset()
+{
+		gameStartFlag = false;
+		startPos = { 200.0f,-2600.0f + 500.0f,0.0f };
+		levelPos = { 200.0f,-2000.0f + 500.0f,0.0f };
 }
