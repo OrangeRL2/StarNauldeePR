@@ -12,15 +12,23 @@
 class SpritePop
 {
 public:
+	//initializes sprite for scene transition
 	void PopTransInit(ID3D12Device* dev);
+	//initializes sprite
 	void PopInit(ID3D12Device* dev);
+	//updates sprite
 	void PopUpdate();
+	//updates transition
 	void PopTransition();
+	//draws
 	void PopDraw(ID3D12GraphicsCommandList* cmdList_, ID3D12Device* dev);
+	//deletes sprite
 	void PopCollision();
-
+	//getter
 	bool IsDead() { return isDead; }
+	//revives
 	void revival() { isDead = false; };
+	//destroys
 	void dead() { isDead = true; };
 private:
 	static ID3D12Device* device;

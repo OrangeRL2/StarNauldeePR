@@ -57,6 +57,9 @@ public:
 	DirectX::XMFLOAT3 GetCenterPos() { return centerpos; }
 	DirectX::XMFLOAT3 GetRotation0() { return rotation0; }
 	DirectX::XMFLOAT3 GetScale0() { return scale0; }
+	bool GetIsDead() { return isDead; }
+	bool IsDead() { return isDead = true; }
+	void revive();
 
 private:
 	//statics
@@ -100,4 +103,6 @@ private:
 	float distanceTime = 60.0f;
 
 	float distanceTimer = 0.0f;
+
+	bool isDead = false;
 };

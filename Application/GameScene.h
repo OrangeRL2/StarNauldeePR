@@ -17,26 +17,24 @@
 
 class GameScene
 {
-	//メンバ関数
+	//Member Functions
 public:
 	GameScene();
 	~GameScene();
 	void Initialize(DirectXCommon* dxCommon, Input* input);
-	//更新
+	//Update
 	void Update();
-	//描画
+	//Draw
 	void Draw();
-	//タイトルシーン
+	//Title Scene
 	void TitleUpdate();
 	void TitleDraw();
-	//ゲームシーン
+	//Game Scene
 	void GameUpdate();
 	void GameDraw();
 
-	//シーンごとのセット関数
-	//タイトルをセット
+	//Scene Setters
 	void SetTitle();
-	//チュートリアルをセット
 	void SetTutorial();
 	void SetStage1();
 	void SetStage2();
@@ -44,21 +42,21 @@ public:
 	void SetStage4();
 	void SetStage5();
 
-	//スペースキーでファイル読み込みを実行する関数
+	//CSV Editor
 	void LoadCsv(const wchar_t* fileName, int obstacleVal);
 	void DebugLoadCsv(const wchar_t* fileName, int obstacleVal);
 
-	//メンバ変数
+	//Member Variables
 private:
-	//デバイスとinput
+	//device and input
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	DXInput* dxInput = new DXInput();
 	
-	//カメラ
+	//Camera
 	std::unique_ptr<Camera> camera_;
 
-	//------------モデル関連-------------
+	//------------Model Related-------------
 	//fbx
 	FbxModel* model1 = nullptr;
 	FbxModel* model2 = nullptr;
@@ -69,8 +67,8 @@ private:
 	//鍵のモデル
 	FbxModel* keyModel = nullptr;
 	
-	//ステージとかタイトルのモデル
-	//タイトル
+	//Stage and Title models
+	//title
 	FbxModel* titleModel = nullptr;
 	//stage1
 	FbxModel* stage1Model = nullptr;
@@ -94,7 +92,7 @@ private:
 	FbxModel* zoomTextModel = nullptr;
 	FbxModel* returnTextModel = nullptr;
 
-	//----------自作クラス---------
+	//----------My Classes---------
 	//Title manager
 	std::unique_ptr<TitleManager> title;
 	//Player
@@ -128,38 +126,38 @@ private:
 
 	//---------------------------
 
-	//スプライト
+	//sprite
 	Sprite* sprite = new Sprite;
 	Sprite titleSprite;	//title.png
 	Sprite keySprite;	//key.png
-	//スプライト共通データ生成
+	//sprite common generation
 	SpriteCommon spriteCommon;
 
-	//シーン
+	//scene
 	enum class Scene
 	{
-		Title,	//タイトル
-		Game,	//ゲーム
+		Title,	//title
+		Game,	//game
 	};
-	//シーン	最初がタイトル
+	//sets first scene to title
 	size_t scene_ = static_cast<size_t>(Scene::Title);
-	//前のフレームのシーン
+	//previous scene
 	size_t preScene_ = static_cast<size_t>(Scene::Title);
-	//メンバ関数のポインタテーブル
+	//Pointer Table
 	static void (GameScene::* Scene_[])();
 
-	//シーンの描画
+	//Scene Draw
 	enum class SceneDraw
 	{
 		TitleDraw,	//タイトル
 		GameDraw,	//ゲーム
 	};
-	//シーン	最初がタイトル
+	//sets first scene to titledraw
 	size_t sceneDraw_ = static_cast<size_t>(SceneDraw::TitleDraw);
-	//メンバ関数のポインタテーブル
+	//table
 	static void (GameScene::* SceneDraw_[])();
 
-	//ステージを分ける列挙型
+	//stage separation
 	enum Stage
 	{
 		Title,
@@ -170,12 +168,12 @@ private:
 		Stage4,
 		Stage5,
 	};
-	//ステージ
+	//stage
 	Stage stage = Stage::Title;
-	//前のフレームのステージ
+	//previous stage
 	Stage preStage = Stage::Title;
 
-	//ステージごとの障害物の数
+	//amount of obstacles pre stage
 	//tutorial
 	size_t tutorialObstacleVal = 9;
 	size_t tutorialObstacleVal1 = 9;
@@ -187,7 +185,7 @@ private:
 
 	float num = 0;
 
-	//クリアーフラッグ
+	//clear flags
 	bool clearTutoFlag = false;
 	bool clear1Flag = false;
 	bool clear2Flag = false;

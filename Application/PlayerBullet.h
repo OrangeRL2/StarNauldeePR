@@ -8,6 +8,7 @@
 class PlayerBullet
 {
 public:
+	//functions
 	PlayerBullet() {};
 	~PlayerBullet() {};
 
@@ -30,12 +31,12 @@ public:
 	static void SetInput(Input* input) { PlayerBullet::input = input; }
 	static void SetDXInput(DXInput* dxInput) { PlayerBullet::dxInput = dxInput; }
 	void SetParent3d(XMFLOAT3* parent) { this->parent_ = parent; }
-
+	//sets player translation
 	void SetPosition0(DirectX::XMFLOAT3 pos) { position1 = pos; }
 	void SetPosition1(DirectX::XMFLOAT3 pos) { position0 = pos; }
 	void SetRotation0(DirectX::XMFLOAT3 rot) { rotation0 = rot; }
 	void SetScale0(DirectX::XMFLOAT3 sca) { scale0 = sca; }
-
+	//gets player translations
 	DirectX::XMFLOAT3 GetPosition0() { return position0; }
 	DirectX::XMFLOAT3 GetPosition1() { return position1; }
 	DirectX::XMFLOAT3 GetFinalPos() { return finalPos; }
@@ -44,7 +45,8 @@ public:
 	DirectX::XMFLOAT3 GetRotation0() { return rotation0; }
 	DirectX::XMFLOAT3 GetScale0() { return scale0; }
 private:
-
+	//variables
+	//device, input and camera
 	static ID3D12Device* device;
 
 	static Camera* camera;
@@ -52,7 +54,7 @@ private:
 	static Input* input;
 
 	static DXInput* dxInput;
-
+	//player translation related
 
 	DirectX::XMFLOAT3 position0 = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 position1 = { 0.0f,0.5f,0.0f };

@@ -105,9 +105,6 @@
     <ClCompile Include="base\Sprite.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
-    <ClCompile Include="base\Camera.cpp">
-      <Filter>ソース ファイル\gameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Application\TitleManager.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
@@ -149,6 +146,9 @@
     </ClCompile>
     <ClCompile Include="Application\SpritePop.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="base\Camera.cpp">
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

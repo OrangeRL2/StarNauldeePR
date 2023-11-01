@@ -33,6 +33,7 @@ public:
 	void PopTransInit(ID3D12Device* dev);
 	void TransitionPop(ID3D12Device* dev);
 	void TransitionReset();
+	void OverDraw(ID3D12GraphicsCommandList* cmdList_, ID3D12Device* dev);
 	//Setters
 	void SetPosition(DirectX::XMFLOAT3 pos) { position = pos; }
 	void SetRotation(DirectX::XMFLOAT3 rot) { rotation = rot; }
@@ -74,6 +75,8 @@ private:
 	Sprite start;//START.png
 	Sprite level1;//LEVEL1.png
 
+	Sprite GAMEOVER;//GAMEOVER.png
+
 	SpriteCommon spriteCommon;
 
 	//fbx
@@ -111,8 +114,8 @@ private:
 	DirectX::XMFLOAT3 levelPos = { 200.0f,-2000.0f+400.0f,0.0f };
 
 	enum class Phase2 {
-		Approach,//接近する
-		Leave,//離脱する
+		Approach,//Approaches
+		Leave,//Leaves
 	};
 	//フェーズ
 	Phase2 phase2_ = Phase2::Approach;

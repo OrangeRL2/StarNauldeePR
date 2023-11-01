@@ -45,8 +45,9 @@ void Player::Update(XMFLOAT3 spline)
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	object0->Draw(cmdList);
-
+	if (isDead == false) {
+		object0->Draw(cmdList);
+	}
 }
 
 
@@ -194,7 +195,7 @@ void Player::TitleUpdate()
 	finalRotation = XMFLOAT3{ frame + rotation0.x,
 								0 + rotation0.y ,
 								0 + rotation0.z };
-	
+
 	object0->SetScale({ scale0 });
 	object0->SetRotation({ finalRotation });
 	PlayerMove();
@@ -208,4 +209,10 @@ void Player::TitleUpdate()
 	object0->Update();
 	/*position0.y += cosf(MathFunc::DegreeConversionRad(time[0])*0.1);*/
 	//position0.z=
+}
+
+void Player::revive()
+{
+	isDead = false;
+	finalPos = { 0.0f,0.5f,0.0f };
 }

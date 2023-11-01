@@ -8,12 +8,12 @@
 
 class RailCamera {
 public:
-	//�C���X�^���X
+	//Functions
 	RailCamera();
 	~RailCamera();
-	//������
+	
 	void Initialize();
-	//�X�V
+	
 	void Update(Player* player_, std::vector<XMFLOAT3>& point);
 	void ViewUpdate();
 
@@ -24,7 +24,7 @@ public:
 	void SetTarget(XMFLOAT3 target_);
 	void ShakeCamera();
 
-	//�x�N�g����擾
+	//
 	void GetVec(XMFLOAT3 a, XMFLOAT3 b);
 
 	Camera* GetView() { return viewProjection; }
@@ -40,7 +40,7 @@ private:
 	int feverTime;
 	bool isFever = false;
 
-	//�X�v���C��
+	
 	Spline spline_;
 	Spline splineCam;
 

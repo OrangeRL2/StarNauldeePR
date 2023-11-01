@@ -22,7 +22,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 #pragma region Camera Initialization
 
-	//カメラ初期化
+	//Camera Initialization
 	Camera::SetInput(input_);
 	Camera::SetDXInput(dxInput);
 	Camera* newCamera = new Camera();
@@ -34,7 +34,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 #pragma endregion
 
 #pragma region FBX Load
-
+	//FBX load
 	FbxLoader::GetInstance()->Initialize(dxCommon_->GetDevice());
 
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Arwing", "Resources/titleScreen/pastelorange.png");
@@ -55,7 +55,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 #pragma region Setting Devices to Objects
 
-	//デバイスをセット
+	//Setting Devices
 	FbxObject3D::SetDevice(dxCommon_->GetDevice());
 	FbxObject3D::SetCamera(camera_.get());
 	FbxObject3D::CreateGraphicsPipeline();
@@ -81,7 +81,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 #pragma endregion
 
 #pragma region Sprite
-
+	//Sprite Load
 	spriteCommon = sprite->SpriteCommonCreate(dxCommon_->GetDevice(), 1280, 720);
 	sprite->SpriteCommonLoadTexture(spriteCommon, 0, L"Resources/title.png", dxCommon_->GetDevice());
 	sprite->SpriteCommonLoadTexture(spriteCommon, 1, L"Resources/key.png", dxCommon_->GetDevice());
@@ -100,7 +100,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 #pragma endregion
 
 #pragma region Level Loader
-
+	//Level Editor
 	jsonLoader = new JsonLoader();
 	jsonLoader->LoadFile("Resources/levels/test10.json");
 	for (int i = 0; i < jsonLoader->GetObjectDatas(); i++)
@@ -185,6 +185,7 @@ void GameScene::Draw()
 
 void GameScene::TitleUpdate()
 {
+	//Update for title
 	title->Update(model1, model1, dxCommon_->GetDevice());
 	if (input_->TriggerKey(DIK_0))stage = Stage::Tutorial;
 	if (input_->TriggerKey(DIK_1))stage = Stage::Stage1;
@@ -194,13 +195,7 @@ void GameScene::TitleUpdate()
 	if (input_->TriggerKey(DIK_5))stage = Stage::Stage5;
 	if (input_->TriggerKey(DIK_9))stage = Stage::Title;
 	camera_->DebugUpdate();
-	/*camera_->SetTarget(XMFLOAT3{ player->GetPosition0().x , player->GetPosition0().y, player->GetPosition0().z  });
-	camera_->SetEye(XMFLOAT3{ player->GetPosition0().x + 20,player->GetPosition0().y + 5.0f, player->GetPosition0().z });*/
-	/*for (std::unique_ptr<FbxObject3D>& object0 : objects)
-	{
-		object0->Update();
-	}*/
-	//camera_->Update();
+	
 	if (stage == Stage::Tutorial) {
 		scene_ = static_cast<size_t>(Scene::Game);
 		sceneDraw_ = static_cast<size_t>(SceneDraw::GameDraw);
@@ -210,6 +205,7 @@ void GameScene::TitleUpdate()
 
 void GameScene::TitleDraw()
 {
+	//drawing for title screen
 	for (std::unique_ptr<FbxObject3D>& object0 : objects)
 	{
 		object0->Draw(dxCommon_->GetCommandList());
@@ -221,10 +217,12 @@ void GameScene::TitleDraw()
 
 void GameScene::GameUpdate()
 {
+	//update for game scene
 	title->Transition(dxCommon_->GetDevice());
 	for (std::unique_ptr<FbxObject3D>& object0 : objects)
 	{
 		object0->Update();
+		
 	}
 	if (title->GetStartFlag() == false) {
 		camera_->DebugUpdate();
@@ -235,7 +233,7 @@ void GameScene::GameUpdate()
 		camera_->Update();
 	}
 	
-	if (title->GetStartFlag() == true) {
+	if (title->GetStartFlag() == true && player->GetIsDead() == false) {
 		
 		eye_ = spline_.Update(points, timeRate);
 		cameraPosition = spline_.Update(points, timeRate);
@@ -249,20 +247,29 @@ void GameScene::GameUpdate()
 		sceneDraw_ = static_cast<size_t>(SceneDraw::TitleDraw);
 		stage = Stage::Title;
 	}
+	if (input_->TriggerKey(DIK_0)) {
+		player->IsDead();
+
+	}
 }
 
 void GameScene::GameDraw()
 {
+	//drawing for title screen
 	for (std::unique_ptr<FbxObject3D>& object0 : objects)
 	{
 		object0->Draw(dxCommon_->GetCommandList());
 	}
 	player->Draw(dxCommon_->GetCommandList());
 	title->GameDraw(dxCommon_->GetCommandList(), dxCommon_->GetDevice());
+	if (player->GetIsDead() == true) {
+		title->OverDraw(dxCommon_->GetCommandList(), dxCommon_->GetDevice());
+	}
 }
 
 void GameScene::SetTitle()
 {
+	//sets title screen
 	camera_->SetTarget({ 0,0,0 });
 	camera_->SetEye({ 0, 0, -70 });
 	timeRate = 0;
@@ -275,7 +282,9 @@ void GameScene::SetTitle()
 
 void GameScene::SetTutorial()
 {
+	//sets tutorial
 
+	player->revive();
 	//title->TransitionPop(dxCommon_->GetDevice());
 	//timeRate = 0;
 	////player->SetTutorial();

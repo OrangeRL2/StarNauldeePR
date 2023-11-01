@@ -36,6 +36,7 @@ void TitleManager::Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* d
 	sprite->SpriteCommonLoadTexture(spriteCommon, 10, L"Resources/titleScreen/Controls.png", dev);
 	sprite->SpriteCommonLoadTexture(spriteCommon, 11, L"Resources/titleScreen/LEVEL1.png", dev);
 	sprite->SpriteCommonLoadTexture(spriteCommon, 12, L"Resources/titleScreen/Start.png", dev);
+	sprite->SpriteCommonLoadTexture(spriteCommon, 13, L"Resources/titleScreen/GAMEOVER.png", dev);
 
 
 	titleSprite.SpriteCreate(dev, 1280, 720);
@@ -106,6 +107,10 @@ void TitleManager::Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* d
 	start.SetPosition(XMFLOAT3(0, 0, 0));
 	start.SetScale(XMFLOAT2(720, 720));
 
+	GAMEOVER.SpriteCreate(dev, 720, 720);
+	GAMEOVER.SetTexNumber(13);
+	GAMEOVER.SetPosition(XMFLOAT3(0, 0, 0));
+	GAMEOVER.SetScale(XMFLOAT2(1280, 720));
 #pragma endregion
 }
 
@@ -439,4 +444,13 @@ void TitleManager::TransitionReset()
 		gameStartFlag = false;
 		startPos = { 200.0f,-2600.0f + 500.0f,0.0f };
 		levelPos = { 200.0f,-2000.0f + 500.0f,0.0f };
+}
+
+void TitleManager::OverDraw(ID3D12GraphicsCommandList* cmdList, ID3D12Device* dev)
+{
+	GAMEOVER.SpriteTransferVertexBuffer(GAMEOVER);
+	GAMEOVER.SpriteUpdate(GAMEOVER, spriteCommon);
+	sprite->SpriteCommonBeginDraw(cmdList, spriteCommon);
+	GAMEOVER.SpriteDraw(cmdList, spriteCommon, dev, GAMEOVER.vbView);
+
 }
