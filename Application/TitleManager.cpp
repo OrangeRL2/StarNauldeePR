@@ -36,7 +36,7 @@ void TitleManager::Initialize(FbxModel* model, FbxModel* model2, ID3D12Device* d
 	sprite->SpriteCommonLoadTexture(spriteCommon, 10, L"Resources/titleScreen/Controls.png", dev);
 	sprite->SpriteCommonLoadTexture(spriteCommon, 11, L"Resources/titleScreen/LEVEL1.png", dev);
 	sprite->SpriteCommonLoadTexture(spriteCommon, 12, L"Resources/titleScreen/Start.png", dev);
-	sprite->SpriteCommonLoadTexture(spriteCommon, 13, L"Resources/titleScreen/GAMEOVER.png", dev);
+	sprite->SpriteCommonLoadTexture(spriteCommon, 13, L"Resources/titleScreen/YOUWIN.png", dev);
 
 
 	titleSprite.SpriteCreate(dev, 1280, 720);

@@ -15,6 +15,8 @@ public:
 	XMFLOAT3 Update(std::vector<XMFLOAT3>& points, float t);
 
 	void Draw();
+
+	void Reset(std::vector<XMFLOAT3>& points, size_t startIndex);
 	//sets points for the spline
 	XMFLOAT3 SplinePosition(std::vector<XMFLOAT3>& point, size_t startIndex, float t);
 

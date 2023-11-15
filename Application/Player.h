@@ -87,12 +87,13 @@ private:
 	DirectX::XMFLOAT3 rotation0 = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 finalRotation = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 scale0 = { 0.01f,0.01f,0.01f };
+
 	bool isRotZRight = true;
 	float swayZ = 0.0f;
 	static const XMFLOAT3 rotLimit;
 	XMFLOAT3 rot = { 0, 0, 0 };
 	const XMFLOAT3* parent_ = nullptr;
-	//std::list<std::unique_ptr<PlayerBullet>>bullets_;
+
 	float rotation = 120;
 	//easing
 	float minFrame = 0.0f;
@@ -105,4 +106,8 @@ private:
 	float distanceTimer = 0.0f;
 
 	bool isDead = false;
+
+	//bulllet related
+	std::list<std::unique_ptr<FbxObject3D>> objects;
+	DirectX::XMFLOAT3 bulletPos = { finalPos.x,finalPos.y,finalPos.z };
 };

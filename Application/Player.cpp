@@ -108,20 +108,26 @@ void Player::PlayerMove()
 
 }
 
-void Player::ShotStraightBullet()
-{
-	//bullet
-	//	const float bulletSpeed = 6;
-	//
-
-	//	std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>(); // Allocate memory for the new bullet
-	//
-	//	newBullet->Initialize();
-	//
-
-	//	bullets_.push_back(std::move(newBullet));
-
-}
+//void Player::ShotStraightBullet()
+//{
+//	std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
+//
+//	newObject->Initialize();
+//	////�e�̑��x��ݒ�
+//	const float bulletSpeed = 6;
+//
+//	newObject->SetModel(model1);
+//
+//	//�I�u�W�F�N�g�X�V
+//	bulletPos = { finalPos.x,finalPos.y,finalPos.z };
+//	//�z�u
+//	newObject->SetPosition(bulletPos);
+//	newObject->SetScale({ scale0 });
+//	newObject->SetRotation({ rotation0 });
+//
+//	objects.push_back(std::move(newObject));
+//
+//}
 
 void Player::PlayerRotate()
 {

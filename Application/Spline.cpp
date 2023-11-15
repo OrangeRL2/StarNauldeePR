@@ -72,3 +72,7 @@ XMFLOAT3 Spline::SplinePosition(std::vector<XMFLOAT3>& points, size_t startIndex
 
 	return position;
 }
+
+void Spline::Reset(std::vector<XMFLOAT3>& points, size_t startIndex) {
+	elapsedCount = startCount;
+}
