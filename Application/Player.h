@@ -4,10 +4,11 @@
 #include "DXInput.h"
 #include "FbxModel.h"
 #include "FbxObject3D.h"
-//#include "PlayerBullet.h"
+#include "PlayerBullet.h"
 #include "List"
 #include "Collision.h"
 #include "Mathfunc.h"
+#include "Vector3.h"
 
 
 class Player
@@ -17,7 +18,7 @@ public:
 	Player() {};
 	~Player() {};
 
-	void Initialize(FbxModel* model);
+	void Initialize(FbxModel* model, FbxModel* bulletModel);
 	void Update(XMFLOAT3 spline);
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
@@ -53,10 +54,12 @@ public:
 	DirectX::XMFLOAT3 GetPosition0() { return position0; }
 	DirectX::XMFLOAT3 GetPosition1() { return position1; }
 	DirectX::XMFLOAT3 GetFinalPos() { return finalPos; }
+	DirectX::XMFLOAT3 GetFinalPos1() { return finalPos1; }
 	DirectX::XMFLOAT3 GetCameraPos0() { return cameraPos0; }
 	DirectX::XMFLOAT3 GetCenterPos() { return centerpos; }
 	DirectX::XMFLOAT3 GetRotation0() { return rotation0; }
 	DirectX::XMFLOAT3 GetScale0() { return scale0; }
+	DirectX::XMFLOAT3 GetBulletPos() { return bulletPos2; }
 	bool GetIsDead() { return isDead; }
 	bool IsDead() { return isDead = true; }
 	void revive();
@@ -77,11 +80,15 @@ private:
 
 	FbxModel* model1 = nullptr;
 	FbxObject3D* object1 = nullptr;
+
+	PlayerBullet* playerBullet;
 	//movement
 	DirectX::XMFLOAT3 position0 = { 0.0f,0.5f,0.0f };
-	DirectX::XMFLOAT3 velocity0 = { 0.8f,0.8f,0.8f };
 	DirectX::XMFLOAT3 position1 = { 0.0f,0.5f,0.0f };
+	DirectX::XMFLOAT3 velocity0 = { 0.2f,0.2f,0.2f };
+	DirectX::XMFLOAT3 velocity1 = { 0.2f,0.2f,0.2f };
 	DirectX::XMFLOAT3 finalPos = { 0.0f,0.5f,0.0f };
+	DirectX::XMFLOAT3 finalPos1 = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 cameraPos0 = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 centerpos = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 rotation0 = { 0.0f,0.0f,0.0f };
@@ -107,7 +114,13 @@ private:
 
 	bool isDead = false;
 
-	//bulllet related
-	std::list<std::unique_ptr<FbxObject3D>> objects;
+	//player speed
+	float speed = 0.4f;
+
+	//bullet related
 	DirectX::XMFLOAT3 bulletPos = { finalPos.x,finalPos.y,finalPos.z };
+	DirectX::XMFLOAT3 bulletPos2 = { finalPos.x,finalPos.y,finalPos.z };
+	//std::list<std::unique_ptr<FbxObject3D>> objects;
+	std::list<std::unique_ptr<PlayerBullet>> objects;
+	bool isBulletDead = false;
 };

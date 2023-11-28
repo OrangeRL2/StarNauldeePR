@@ -14,6 +14,7 @@
 #include "Spline.h"
 #include"JsonLoader.h"
 #include"TitleManager.h"
+#include"Enemy.h"
 
 class GameScene
 {
@@ -46,6 +47,8 @@ public:
 	void LoadCsv(const wchar_t* fileName, int obstacleVal);
 	void DebugLoadCsv(const wchar_t* fileName, int obstacleVal);
 
+	void Collisions();
+
 	//Member Variables
 private:
 	//device and input
@@ -62,6 +65,7 @@ private:
 	FbxModel* model2 = nullptr;
 	//岩のモデル
 	FbxModel* stoneModel = nullptr;
+	FbxModel* stoneModel2 = nullptr;
 	//ゴールのモデル
 	FbxModel* goalModel = nullptr;
 	//鍵のモデル
@@ -99,8 +103,13 @@ private:
 	std::unique_ptr<Player> player;
 	std::unique_ptr<PlayerBullet> playerBullet;
 
+	//Enemy
+	std::unique_ptr<Enemy> enemy;
+	std::list<std::unique_ptr<Enemy>> enemyObjects;
+	//Particle* particle = nullptr;
 	//Level Editor
 	JsonLoader* jsonLoader = nullptr;
+	JsonLoader* jsonLoader2 = nullptr;
 	//
 	std::list<std::unique_ptr<FbxObject3D>> objects;
 

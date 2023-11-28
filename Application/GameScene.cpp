@@ -40,6 +40,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Arwing", "Resources/titleScreen/pastelorange.png");
 	model2 = FbxLoader::GetInstance()->LoadModelFromFile("Idle", "Resources/white1x1.png");
 	stoneModel = FbxLoader::GetInstance()->LoadModelFromFile("stone", "Resources/white1x1.png");
+	stoneModel2 = FbxLoader::GetInstance()->LoadModelFromFile("stone", "Resources/red.png");
 	goalModel = FbxLoader::GetInstance()->LoadModelFromFile("goal", "Resources/portal.png");
 	keyModel = FbxLoader::GetInstance()->LoadModelFromFile("key", "Resources/key.png");
 	titleModel = FbxLoader::GetInstance()->LoadModelFromFile("title", "Resources/red.png");
@@ -71,9 +72,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 
 	Player* newPlayer = new Player();
-	newPlayer->Initialize(model1);
+	newPlayer->Initialize(model1,stoneModel);
 	player.reset(newPlayer);
-
 
 	//PlayerBullet* newPlayerBullet = new PlayerBullet();
 	//newPlayerBullet->Initialize(model1, player->GetFinalPos());
@@ -131,6 +131,25 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	}
 
 	points = { start,start,p2,p3,p4,end,end };
+
+	jsonLoader2 = new JsonLoader();
+	jsonLoader2->LoadFile("Resources/levels/enemyTest4.json");
+
+	for (int i = 0; i < jsonLoader2->GetObjectDatas(); i++)
+	{
+		std::unique_ptr<Enemy>newObject = std::make_unique<Enemy>();
+
+		//�I�u�W�F�N�g������
+		newObject->Initialize(stoneModel2,stoneModel);
+		/*newObject->SetModel(model1);
+		newObject->PlayAnimation();*/
+		//���f���Z�b�g
+		newObject->SetPosition0(jsonLoader2->GetPosition(i));
+		newObject->SetScale0(jsonLoader2->GetScale(i));
+		newObject->SetRotation0(jsonLoader2->GetRotation(i));
+
+		enemyObjects.push_back(std::move(newObject));
+	}
 #pragma endregion
 
 	SetTitle();
@@ -216,12 +235,17 @@ void GameScene::TitleDraw()
 
 void GameScene::GameUpdate()
 {
+	enemyObjects.remove_if([](std::unique_ptr<Enemy>& object0) {
+		return object0->GetIsDead();
+		});
+	Collisions();
 	//update for game scene
 	title->Transition(dxCommon_->GetDevice());
 	for (std::unique_ptr<FbxObject3D>& object0 : objects)
 	{
 		object0->Update();
 	}
+	
 	if (title->GetStartFlag() == false) {
 		camera_->DebugUpdate();
 		eye_ = spline_.Update(points, timeRate);
@@ -237,9 +261,13 @@ void GameScene::GameUpdate()
 		eye_ = spline_.Update(points, timeRate);
 		cameraPosition.x -= 1.0f;
 		cameraPosition.y = 30.0f;
-		camera_->SetTarget(XMFLOAT3{ player->GetPosition0().x + cameraPosition.x, player->GetPosition0().y + cameraPosition.y, player->GetPosition0().z + cameraPosition.z });
-		camera_->SetEye(XMFLOAT3{ player->GetPosition0().x + cameraPosition.x + 20,player->GetPosition0().y + cameraPosition.y + 5.0f, player->GetPosition0().z + cameraPosition.z });
+		camera_->SetTarget(XMFLOAT3{ player->GetPosition1().x + cameraPosition.x, player->GetPosition1().y + cameraPosition.y, player->GetPosition1().z + cameraPosition.z });
+		camera_->SetEye(XMFLOAT3{ player->GetPosition1().x + cameraPosition.x + 20,player->GetPosition1().y + cameraPosition.y + 5.0f, player->GetPosition1().z + cameraPosition.z });
 		camera_->Update();
+		for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+		{
+			object1->Update(cameraPosition);
+		}
 	}
 	if (cameraPosition.x <= end.x) {
 		player->IsDead();
@@ -262,6 +290,13 @@ void GameScene::GameDraw()
 	{
 		object0->Draw(dxCommon_->GetCommandList());
 	}
+	for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+	{
+		if (object1->GetIsDead() == false) {
+			object1->Draw(dxCommon_->GetCommandList());
+		}
+	}
+
 	player->Draw(dxCommon_->GetCommandList());
 	title->GameDraw(dxCommon_->GetCommandList(), dxCommon_->GetDevice());
 	if (player->GetIsDead() == true) {
@@ -271,6 +306,10 @@ void GameScene::GameDraw()
 
 void GameScene::SetTitle()
 {
+	for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+	{
+		object1->IsDead();
+	}
 	//sets title screen
 	camera_->SetTarget({ 0,0,0 });
 	camera_->SetEye({ 0, 0, -70 });
@@ -279,61 +318,41 @@ void GameScene::SetTitle()
 	//title->TransitionPop(dxCommon_->GetDevice());
 	title->TransitionReset();
 	//points = { start,start,p2,p3,p4,end,end };
-	
+	cameraPosition.x = 800.0f;
 }
 
 void GameScene::SetTutorial()
 {
 	//sets tutorial
+	jsonLoader2 = new JsonLoader();
+	jsonLoader2->LoadFile("Resources/levels/enemyTest4.json");
 
+	for (int i = 0; i < jsonLoader2->GetObjectDatas(); i++)
+	{
+		std::unique_ptr<Enemy>newObject = std::make_unique<Enemy>();
+
+		//�I�u�W�F�N�g������
+		newObject->Initialize(stoneModel2, stoneModel);
+		/*newObject->SetModel(model1);
+		newObject->PlayAnimation();*/
+		//���f���Z�b�g
+		newObject->SetPosition0(jsonLoader2->GetPosition(i));
+		newObject->SetScale0(jsonLoader2->GetScale(i));
+		newObject->SetRotation0(jsonLoader2->GetRotation(i));
+
+		enemyObjects.push_back(std::move(newObject));
+	}
 	player->revive();
-
+	for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+	{
+		object1->revive();
+	}
 	//start = { 0,0,0 };
 	timeRate = 0;
 
-	cameraPosition.x = -100.0f;
+	cameraPosition.x = 800.0f;
 	cameraPosition.y = 30.0f;
-	/*points = { start,start,p2,p3,p4,end,end };
-	spline_.Reset(points, timeRate);*/
-	/*eye_ = spline_.Update(points, timeRate);
-	cameraPosition = spline_.Update(points, timeRate);*/
-	//title->TransitionPop(dxCommon_->GetDevice());
-	//timeRate = 0;
-	////player->SetTutorial();
-
-	//jsonLoader = new JsonLoader();
-	//jsonLoader->LoadFile("Resources/levels/test12.json");
-	//
-	//for (int i = 0; i < jsonLoader->GetObjectDatas(); i++)
-	//{
-	//	std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
-	//	
-	//	newObject->Initialize();
-	//	/*newObject->SetModel(model1);
-	//	newObject->PlayAnimation();*/
-	//	for (std::unique_ptr<FbxModel>& model : models)
-	//	{
-	//		if (jsonLoader->GetFileName(i) == model->GetFileName())
-	//		{
-	//			newObject->SetModel(model.get());
-	//		}
-	//	}
-	//	newObject->SetPosition(jsonLoader->GetPosition(i));
-	//	newObject->SetScale(jsonLoader->GetScale(i));
-	//	newObject->SetRotation(jsonLoader->GetRotation(i));
-
-	//	start = { jsonLoader->GetPoint1(0) };
-	//	p2 = { jsonLoader->GetPoint2(0) };
-	//	p3 = { jsonLoader->GetPoint3(0) };
-	//	p4 = { jsonLoader->GetPoint4(0) };
-	//	end = { jsonLoader->GetPoint5(0) };
-
-	//	objects.push_back(std::move(newObject));
-	//}
-
-	//points = { start,start,p2,p3,p4,end,end };
-
-	//spline_.Update(points, timeRate);
+	
 }
 
 void GameScene::SetStage1()
@@ -385,3 +404,54 @@ void (GameScene::* GameScene::SceneDraw_[])() =
 	&GameScene::TitleDraw,
 	&GameScene::GameDraw,
 };
+void GameScene::Collisions() {
+	/*for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+		if (object1->GetPosition0().x - player->GetFinalPos().x < 1 &&
+			-1 < object1->GetPosition0().x - player->GetFinalPos().x) {
+			if (object1->GetPosition0().y - player->GetFinalPos().y < 1 &&
+				-1 < object1->GetPosition0().y - player->GetFinalPos().y) {
+				if (object1->GetPosition0().z - player->GetFinalPos().z < 1 &&
+					-1 < object1->GetPosition0().z - player->GetFinalPos().z) {
+					player->IsDead();
+				}
+			}
+		}*/
+
+	/*for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+		if (object1->GetBulletPos().x - player->GetFinalPos().x < 2 &&
+			-2 < object1->GetBulletPos().x - player->GetFinalPos().x) {
+			if (object1->GetBulletPos().y - player->GetFinalPos().y < 2 &&
+				-2 < object1->GetBulletPos().y - player->GetFinalPos().y) {
+				if (object1->GetBulletPos().z - player->GetFinalPos().z < 2 &&
+					-2 < object1->GetBulletPos().z - player->GetFinalPos().z) {
+					player->IsDead();
+				}
+			}
+		}*/
+
+	for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+		if (object1->GetPosition0().x - player->GetBulletPos().x < 6 &&
+			-6 < object1->GetPosition0().x - player->GetBulletPos().x) {
+			if (object1->GetPosition0().y - player->GetBulletPos().y < 6 &&
+				-6 < object1->GetPosition0().y - player->GetBulletPos().y) {
+				if (object1->GetPosition0().z - player->GetBulletPos().z < 3 &&
+					-3 < object1->GetPosition0().z - player->GetBulletPos().z) {
+					object1->Collision();
+					//object1->IsDead();
+					object1->CollisionParticle();
+				}
+			}
+		}
+
+	for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+		if (object1->GetBulletPos().x - player->GetBulletPos().x < 5 &&
+			-5 < object1->GetBulletPos().x - player->GetBulletPos().x) {
+			if (object1->GetBulletPos().y - player->GetBulletPos().y < 5 &&
+				-5 < object1->GetBulletPos().y - player->GetBulletPos().y) {
+				if (object1->GetBulletPos().z - player->GetBulletPos().z < 5 &&
+					-5 < object1->GetBulletPos().z - player->GetBulletPos().z) {
+					object1->Collision();
+				}
+			}
+		}
+}

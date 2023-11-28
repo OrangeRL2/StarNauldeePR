@@ -1,15 +1,23 @@
 #include "Player.h"
-
+#include <SimpleMath.h>
 ID3D12Device* Player::device = nullptr;
 Camera* Player::camera = nullptr;
 Input* Player::input = nullptr;
 DXInput* Player::dxInput = nullptr;
 const XMFLOAT3 Player::rotLimit = { 0.5f, 0.5f, 0.5f };
-void Player::Initialize(FbxModel* model)
+void Player::Initialize(FbxModel* model, FbxModel* bulletModel)
 {
+	model1 = bulletModel;
+
 	object0 = new FbxObject3D;
 	object0->Initialize();
 	object0->SetModel(model);
+
+	object1 = new FbxObject3D;
+	object1->Initialize();
+	object1->SetModel(model1);
+
+	
 }
 void Player::Update(XMFLOAT3 spline)
 {
@@ -21,31 +29,54 @@ void Player::Update(XMFLOAT3 spline)
 	finalPos = XMFLOAT3{ spline.x + position0.x,
 						 spline.y + position0.y ,
 						 spline.z + position0.z };
-	finalRotation = XMFLOAT3{ frame + rotation0.x,
+
+	finalPos1 = XMFLOAT3{spline.x + position1.x,
+						 spline.y + position1.y ,
+						 spline.z + position1.z };
+	finalRotation = XMFLOAT3{ frame+rotation0.x,
 								0 + rotation0.y ,
 								0 + rotation0.z };
 	object0->SetPosition(finalPos);
 	object0->SetScale({ scale0 });
 	object0->SetRotation({ finalRotation });
+	
+	object1->SetPosition(finalPos1);
+	object1->SetScale({ scale0 });
+	object1->SetRotation({ finalRotation });
 
 	object0->Update();
+	object1->Update();
 
-	/*if (input->PushKey(DIK_SPACE))
+	if (input->TriggerKey(DIK_SPACE))
 	{
 		ShotStraightBullet();
-	}*/
+	}
 
-	//bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
-	//	//return bullet->IsDead();
-	//	});
-	/*for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-		bullet->Update(finalPos);
-	}*/
+	for (std::unique_ptr<PlayerBullet>& object0 : objects)
+	{
+		object0->Update();
+		bulletPos2 = object0->GetFinalPos();
+	}
+	/*if (position0.z =! position1.z) {*/
+
+	//player1がplayer0についていく処理
+	XMVECTOR player0 = XMLoadFloat3(&position0);
+	XMVECTOR player1 = XMLoadFloat3(&position1);
+	XMVECTOR direction = XMVector3Normalize(player0 - player1);
+
+	player1 = player1 + direction / 5;
+	XMStoreFloat3(&position1, player1);
+	//}
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	if (isDead == false) {
+		object0->Draw(cmdList);
+		object1->Draw(cmdList);
+	}
+	for (std::unique_ptr<PlayerBullet>& object0 : objects)
+	{
 		object0->Draw(cmdList);
 	}
 }
@@ -56,17 +87,15 @@ void Player::PlayerMove()
 	//player movement
 	if (input->PushKey(DIK_W))
 	{
-
-		position0.y += velocity0.y;
-		centerpos.y += 0.4f;
-		rotation0.z -= 0.05f;
-
+		if (position0.y <= 21.0f) {
+			position0.y += velocity0.y;
+			rotation0.z -= 0.05f;
+		}
 	}
 	if (input->PushKey(DIK_S))
 	{
 		if (position0.y >= -21.0f) {
 			position0.y -= velocity0.y;
-			centerpos.y -= 0.4f;
 			rotation0.z += 0.05f;
 		}
 	}
@@ -74,7 +103,6 @@ void Player::PlayerMove()
 	{
 		if (position0.z <= 15.0f) {
 			position0.z += velocity0.z;
-			centerpos.y += 0.4f;
 			rotation0.x += 0.1f;
 		}
 
@@ -83,7 +111,6 @@ void Player::PlayerMove()
 	{
 		if (position0.z >= -15.0f) {
 			position0.z -= velocity0.z;
-			centerpos.z -= 0.4f;
 			rotation0.x -= 0.1f;
 		}
 	}
@@ -96,7 +123,7 @@ void Player::PlayerMove()
 	if (rotation0.x <= 0.0f) {
 		rotation0.x += 0.02f;
 	}
-	if (rotation0.x >= 0.0f) {
+	else if (rotation0.x >= 0.0f) {
 		rotation0.x -= 0.02f;
 	}
 	rotation0.y = max(rotation0.y, -rotLimit.y);
@@ -108,26 +135,17 @@ void Player::PlayerMove()
 
 }
 
-//void Player::ShotStraightBullet()
-//{
-//	std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
-//
-//	newObject->Initialize();
-//	////�e�̑��x��ݒ�
-//	const float bulletSpeed = 6;
-//
-//	newObject->SetModel(model1);
-//
-//	//�I�u�W�F�N�g�X�V
-//	bulletPos = { finalPos.x,finalPos.y,finalPos.z };
-//	//�z�u
-//	newObject->SetPosition(bulletPos);
-//	newObject->SetScale({ scale0 });
-//	newObject->SetRotation({ rotation0 });
-//
-//	objects.push_back(std::move(newObject));
-//
-//}
+void Player::ShotStraightBullet()
+{
+	std::unique_ptr<PlayerBullet>newObject = std::make_unique<PlayerBullet>();
+
+	bulletPos = { finalPos.x,finalPos.y,finalPos.z };
+
+	newObject->Initialize(model1,bulletPos);
+
+	objects.push_back(std::move(newObject));
+
+}
 
 void Player::PlayerRotate()
 {
@@ -175,6 +193,7 @@ void Player::SetTutorial()
 	object0->SetScale({ scale0 });
 	object0->SetRotation({ finalRotation });
 	scale0 = { 0.01f,0.01f,0.01f };
+	position1 = finalPos;
 }
 
 void Player::TitleUpdate()
@@ -221,4 +240,5 @@ void Player::revive()
 {
 	isDead = false;
 	finalPos = { 0.0f,0.5f,0.0f };
+	position1 = { 0.0f,0.5f,0.0f };
 }

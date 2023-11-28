@@ -125,6 +125,7 @@
     <ClCompile Include="Application\Spline.cpp" />
     <ClCompile Include="Application\TitleManager.cpp" />
     <ClCompile Include="Application\SpritePop.cpp" />
+    <ClCompile Include="Particle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\AudioManager.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Application\Spline.h" />
     <ClInclude Include="Application\TitleManager.h" />
     <ClInclude Include="Application\SpritePop.h" />
+    <ClInclude Include="Particle.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="imgui\imgui.vcxproj">

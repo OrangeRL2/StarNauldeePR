@@ -65,7 +65,9 @@ public://member functions
 	void SetPosition(XMFLOAT3 pos) { position = pos; }
 	void SetRotation(XMFLOAT3 rot) { rotation = rot; }
 	void SetScale(XMFLOAT3 sca) { scale = sca; }
-
+	bool SetDeath() { return isDead = true; }
+	bool GetDeath() { return isDead; }
+	XMFLOAT3 GetPosition() { return position; }
 private://member variables
 	//constant buffer
 	ComPtr<ID3D12Resource>constBuffTransform;
@@ -99,4 +101,7 @@ private:
 	FbxTime currentTime;
 	
 	bool isPlay = false;
+
+	//Death
+	bool isDead = false;
 };

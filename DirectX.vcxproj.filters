@@ -153,6 +153,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\DirectXCommon.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
