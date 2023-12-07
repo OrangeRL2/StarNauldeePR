@@ -15,6 +15,12 @@
 
 #include "WinApp.h"
 
+/**
+ * @file DirectXCommon.h
+ * @brief Class for DirectX12
+ * @author Nauldee Nawill
+ */
+
 using namespace Microsoft::WRL;
 
 class DirectXCommon

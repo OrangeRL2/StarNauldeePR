@@ -9,6 +9,14 @@
 #include "Particle.h"
 #include "Player.h"
 #include "MathFunc.h"
+#include "EnemyBullet.h"
+
+/**
+ * @file Enemy.h
+ * @brief Class for regular enemies
+ * @author Nauldee Nawill
+ */
+
 class Enemy
 {
 public:
@@ -19,7 +27,7 @@ public:
 	//������
 	void Initialize(FbxModel* model, FbxModel* model2);
 	//�X�V
-	void Update(XMFLOAT3 spline);
+	void Update(XMFLOAT3 spline, XMFLOAT3 playerPos);
 	//�`��
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
@@ -36,9 +44,10 @@ public:
 	/// <summary>
 	/// shoots bullet
 	/// </summary>
-	void ShotStraightBullet();
+	void ShotStraightBullet(XMFLOAT3 playerPos);
 
-	void Rotate();
+	void EnemyCol();
+	void BulletCol();
 	float Deg2Rad(float targetPos);
 
 	//setters
@@ -62,7 +71,7 @@ public:
 	DirectX::XMFLOAT3 GetCenterPos() { return centerpos; }
 	DirectX::XMFLOAT3 GetRotation0() { return rotation0; }
 	DirectX::XMFLOAT3 GetScale0() { return scale0; }
-	DirectX::XMFLOAT3 GetBulletPos() { return bulletPos; }
+	DirectX::XMFLOAT3 GetBulletPos() { return bulletPos2; }
 	DirectX::XMFLOAT3 GetParticlePos() { return particlePos; }
 
 private:
@@ -102,11 +111,13 @@ private:
 	// �e�ƂȂ郏�[���h�ϊ��ւ̃|�C���^
 	const XMFLOAT3* parent_ = nullptr;
 	
-	std::list<std::unique_ptr<FbxObject3D>> objects;
+	//std::list<std::unique_ptr<FbxObject3D>> objects;
 	XMFLOAT3 bulletPos = { finalPos.x,finalPos.y,finalPos.z };
+	XMFLOAT3 bulletPos2 = { finalPos.x,finalPos.y,finalPos.z };
 	XMFLOAT3 particlePos = { finalPos.x,finalPos.y,finalPos.z };
 	Particle* particleBullet;
 	std::list<std::unique_ptr<Particle>> particles;
+	std::list<std::unique_ptr<EnemyBullet>> bullets;
 	bool shotFlag = false;
 	int shotTimer = 0;
 	bool isDead = false;

@@ -9,6 +9,13 @@
 #include "Mathfunc.h"
 #include "SimpleMath.h"
 #include "MathFunc.h"
+
+/**
+ * @file SpritePop.h
+ * @brief Class for spawning multiple sprite objects
+ * @author Nauldee Nawill
+ */
+
 class SpritePop
 {
 public:

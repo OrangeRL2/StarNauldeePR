@@ -6,6 +6,12 @@
 #include "Spline.h"
 #include "Player.h"
 
+/**
+ * @file RailCamera.h
+ * @brief Class for Rail Camera
+ * @author Nauldee Nawill
+ */
+
 class RailCamera {
 public:
 	//Functions

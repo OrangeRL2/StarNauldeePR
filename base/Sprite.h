@@ -18,6 +18,13 @@ using namespace Microsoft::WRL;
 
 #include "DirectXCommon.h"
 
+
+/**
+ * @file Sprite.h
+ * @brief Class for rendering 2D sprites
+ * @author Nauldee Nawill
+ */
+
 struct PipelineSet {
 
 	ComPtr<ID3D12PipelineState> pipelinestate;

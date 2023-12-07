@@ -23,7 +23,7 @@ void Enemy::Initialize(FbxModel* model, FbxModel* model2)
 	model1 = model2;
 
 }
-void Enemy::Update(XMFLOAT3 spline)
+void Enemy::Update(XMFLOAT3 spline, XMFLOAT3 playerPos)
 {
 	if (particleFlag == true) {
 		time += 1;
@@ -31,11 +31,12 @@ void Enemy::Update(XMFLOAT3 spline)
 			IsDead();
 		}
 	}
-
+	
 	if (shotFlag == false)
 	{
-		ShotStraightBullet();
-		shotTimer = 500;
+		position1 = playerPos;
+		ShotStraightBullet(position1);
+		shotTimer = 200;
 		shotFlag = true;
 	}
 	if (shotTimer > 0) {
@@ -44,15 +45,10 @@ void Enemy::Update(XMFLOAT3 spline)
 			shotFlag = false;
 		}
 	}
-	for (std::unique_ptr<FbxObject3D>& object0 : objects)
+	for (std::unique_ptr<EnemyBullet>& object0 : bullets)
 	{
 		object0->Update();
-
-		XMFLOAT3 velocity;
-		velocity = { 1,0,10 };
-		bulletPos.x += velocity.x;
-		//�z�u
-		object0->SetPosition(bulletPos);
+		bulletPos2 = object0->GetFinalPos();
 	}
 	
 	for (std::unique_ptr<Particle>& object0 : particles)
@@ -60,7 +56,7 @@ void Enemy::Update(XMFLOAT3 spline)
 		object0->Update();
 	}
 
-	objects.remove_if([](std::unique_ptr<FbxObject3D>& object0) {
+	bullets.remove_if([](std::unique_ptr<EnemyBullet>& object0) {
 		return object0->GetDeath();
 		});
 	//�I�u�W�F�N�g�X�V
@@ -73,17 +69,7 @@ void Enemy::Update(XMFLOAT3 spline)
 
 	object0->Update();
 	
-	/*if (input->PushKey(DIK_SPACE))
-	{
-		ShotStraightBullet();
-	}*/
-
-	//bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
-	//	//return bullet->IsDead();
-	//	});
-	/*for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-		bullet->Update(finalPos);
-	}*/
+	
 }
 
 void Enemy::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -92,7 +78,7 @@ void Enemy::Draw(ID3D12GraphicsCommandList* cmdList)
 	object0->Draw(cmdList);
 	}
 	
-	for (std::unique_ptr<FbxObject3D>& object0 : objects)
+	for (std::unique_ptr<EnemyBullet>& object0 : bullets)
 	{
 		object0->Draw(cmdList);
 	}
@@ -174,7 +160,7 @@ void Enemy::CameraFollow()
 	//position0.z += velocity.z;
 }
 
-void Enemy::Rotate()
+void Enemy::EnemyCol()
 {
 	std::unique_ptr<Particle>newObject = std::make_unique<Particle>();
 
@@ -184,35 +170,38 @@ void Enemy::Rotate()
 
 	particles.push_back(std::move(newObject));
 }
-
-void Enemy::ShotStraightBullet()
+void Enemy::BulletCol()
 {
-	std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
+	for (std::unique_ptr<EnemyBullet>& object0 : bullets)
+	{
+	std::unique_ptr<Particle>newObject = std::make_unique<Particle>();
 
-	newObject->Initialize();
-	////�e�̑��x��ݒ�
-	const float bulletSpeed = 6;
+	particlePos = { bulletPos.x,bulletPos.y,bulletPos.z };
 
-	newObject->SetModel(model1);
+	newObject->Initialize(model0, particlePos);
 
-	//�I�u�W�F�N�g�X�V
+	particles.push_back(std::move(newObject));
+	}
+}
+
+void Enemy::ShotStraightBullet(XMFLOAT3 playerPos)
+{
+	std::unique_ptr<EnemyBullet>newObject = std::make_unique<EnemyBullet>();
+
 	bulletPos = { position0.x,position0.y,position0.z };
-	//�z�u
-	newObject->SetPosition(bulletPos);
-	newObject->SetScale({ scale0 });
-	newObject->SetRotation({ rotation0 });
+	position1;
+	newObject->Initialize(model1, position0, playerPos);
 
-	objects.push_back(std::move(newObject));
+	bullets.push_back(std::move(newObject));
 
 }
 
 void Enemy::Collision()
 {
-	for (std::unique_ptr<FbxObject3D>& object0 : objects)
+	for (std::unique_ptr<EnemyBullet>& object0 : bullets)
 	{
-		object0->SetDeath();
+		object0->Collision();
 	}
-
 }
 
 void Enemy::CollisionParticle()
@@ -220,7 +209,7 @@ void Enemy::CollisionParticle()
 	if(particleFlag == false)
 	{
 	for (int i = 0; i < 10; i++) {
-		Rotate();
+		EnemyCol();
 	}
 	particleFlag = true;
 	}

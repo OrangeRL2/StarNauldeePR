@@ -4,7 +4,11 @@
 
 static const int window_width = 1280;	//window width
 static const int window_height = 720;	//window height
-
+/**
+ * @file WinApp.h
+ * @brief Class to create and manage a window
+ * @author Nauldee Nawill
+ */
 class WinApp
 {
 public:

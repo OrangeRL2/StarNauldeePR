@@ -6,6 +6,12 @@
 #include "string"
 #include "list"
 
+/**
+ * @file JsonLoader.h
+ * @brief Class for loading .json files
+ * @author Nauldee Nawill
+ */
+
 class JsonLoader
 {
 private:	//alias

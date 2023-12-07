@@ -5,6 +5,13 @@
 #include "FbxModel.h"
 #include "FbxObject3D.h"
 #include "DirectXCommon.h"
+
+/**
+ * @file Particle.h
+ * @brief Class for Particles
+ * @author Nauldee Nawill
+ */
+
 class Particle
 {
 public:
@@ -63,7 +70,7 @@ private:
 	DirectX::XMFLOAT3 centerpos = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 rotation0 = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 rotation1 = { 0.0f,0.0f,0.0f };
-	DirectX::XMFLOAT3 scale0 = { 0.02f,0.02f,0.02f };
+	DirectX::XMFLOAT3 scale0 = { 0.01f,0.01f,0.01f };
 
 
 	bool isRotZRight = true;

@@ -15,6 +15,12 @@
 #define MaxCountrollers 4
 #define MaxVibration 65535
 
+/**
+ * @file DXInput.h
+ * @brief Class for Xbox controller input
+ * @author Nauldee Nawill
+ */
+
 /// <summary>
 /// Gamepad
 /// </summary>

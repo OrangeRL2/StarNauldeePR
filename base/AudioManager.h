@@ -14,6 +14,12 @@
 #include <iterator>
 #include <wrl.h>
 
+/**
+ * @file AudioManager.h
+ * @brief Class for managing sounds
+ * @author Nauldee Nawill
+ */
+
 //チャンクヘッダ
 struct ChunkHeader {
 	char id[4];		//チャンク毎のID

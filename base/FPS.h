@@ -5,6 +5,12 @@
 #include <timeapi.h>
 #pragma comment(lib, "winmm.lib")
 
+/**
+ * @file FPS.h
+ * @brief Class for locking FPS
+ * @author Nauldee Nawill
+ */
+
 class FPS {
 private:
 	// CPU frequency

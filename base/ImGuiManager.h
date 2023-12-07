@@ -2,6 +2,12 @@
 #include "WinApp.h"
 #include "DirectXCommon.h"
 
+/**
+ * @file ImGuiManager.h
+ * @brief Class for managing IMGui
+ * @author Nauldee Nawill
+ */
+
 class ImGuiManager
 {
 public:

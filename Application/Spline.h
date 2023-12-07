@@ -6,6 +6,12 @@
 #include "FbxObject3D.h"
 #include <Vector>
 
+/**
+ * @file Spline.h
+ * @brief Class for setting spline positions
+ * @author Nauldee Nawill
+ */
+
 class Spline
 {
 public:

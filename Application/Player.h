@@ -10,6 +10,11 @@
 #include "Mathfunc.h"
 #include "Vector3.h"
 
+/**
+ * @file Player.h
+ * @brief Class for Player
+ * @author Nauldee Nawill
+ */
 
 class Player
 {
@@ -85,6 +90,7 @@ private:
 	//movement
 	DirectX::XMFLOAT3 position0 = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 position1 = { 0.0f,0.5f,0.0f };
+
 	DirectX::XMFLOAT3 velocity0 = { 0.2f,0.2f,0.2f };
 	DirectX::XMFLOAT3 velocity1 = { 0.2f,0.2f,0.2f };
 	DirectX::XMFLOAT3 finalPos = { 0.0f,0.5f,0.0f };
@@ -94,6 +100,11 @@ private:
 	DirectX::XMFLOAT3 rotation0 = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 finalRotation = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 scale0 = { 0.01f,0.01f,0.01f };
+
+	const float verticalLimit = 21.0f;
+	const float horizontalLimit = 20.0f;
+	const float xRotationChange = 0.1f;
+	const float zRotationChange = 0.05f;
 
 	bool isRotZRight = true;
 	float swayZ = 0.0f;
@@ -115,12 +126,19 @@ private:
 	bool isDead = false;
 
 	//player speed
-	float speed = 0.4f;
+	float speed = 0.5f;
 
 	//bullet related
 	DirectX::XMFLOAT3 bulletPos = { finalPos.x,finalPos.y,finalPos.z };
 	DirectX::XMFLOAT3 bulletPos2 = { finalPos.x,finalPos.y,finalPos.z };
-	//std::list<std::unique_ptr<FbxObject3D>> objects;
+
 	std::list<std::unique_ptr<PlayerBullet>> objects;
 	bool isBulletDead = false;
+
+	//reticle related
+	FbxModel* retModel = nullptr;
+	FbxObject3D* retObject = nullptr;
+
+	DirectX::XMFLOAT3 retPos = { -20.0f,0.5f,0.0f };
+	DirectX::XMFLOAT3 retFinalPos = { 0.0f,0.5f,0.0f };
 };

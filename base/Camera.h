@@ -5,7 +5,12 @@
 #include "WinApp.h"
 #include <SimpleMath.h>
 
-//#include "Player.h"
+/**
+ * @file Camera.h
+ * @brief Class for Camera
+ * @author Nauldee Nawill
+ */
+
 #define PI 3.14159265359
 
 using namespace DirectX;

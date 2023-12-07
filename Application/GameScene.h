@@ -16,6 +16,12 @@
 #include"TitleManager.h"
 #include"Enemy.h"
 
+/**
+ * @file GameScene.h
+ * @brief Game Scene
+ * @author Nauldee Nawill
+ */
+
 class GameScene
 {
 	//Member Functions

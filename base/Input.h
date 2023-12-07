@@ -7,6 +7,12 @@
 #include <XInput.h>
 #include "WinApp.h"
 
+/**
+ * @file Input.h
+ * @brief Class for inputs
+ * @author Nauldee Nawill
+ */
+
 #define DIRECTINPUT_VERSION 0x0800 // DirectInput Version
 using namespace Microsoft::WRL;
 #include <dinput.h>

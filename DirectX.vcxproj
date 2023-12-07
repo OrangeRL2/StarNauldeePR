@@ -107,6 +107,7 @@
     <ClCompile Include="base\CircleShadow.cpp" />
     <ClCompile Include="base\3D\Collision.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="fbx\FbxLoader.cpp" />
     <ClCompile Include="fbx\FbxModel.cpp" />
     <ClCompile Include="fbx\FbxObject3D.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="base\CircleShadow.h" />
     <ClInclude Include="base\3D\Collision.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="fbx\FbxLoader.h" />
     <ClInclude Include="fbx\FbxModel.h" />
     <ClInclude Include="fbx\FbxObject3D.h" />

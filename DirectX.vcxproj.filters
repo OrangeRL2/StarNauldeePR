@@ -153,8 +153,11 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>ソース ファイル\gameObject</Filter>
+    </ClCompile>
     <ClCompile Include="Particle.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,8 +248,11 @@
     <ClInclude Include="Enemy.h">
       <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
     <ClInclude Include="Particle.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\gameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

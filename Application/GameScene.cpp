@@ -252,7 +252,7 @@ void GameScene::GameUpdate()
 		cameraPosition.x -= 0.5f;
 		cameraPosition.y = 30.0f;
 		camera_->SetTarget(XMFLOAT3{ -100,-100, -100 });
-		camera_->SetEye(XMFLOAT3{ player->GetFinalPos().x + 20,player->GetFinalPos().y + 5.0f, player->GetFinalPos().z });
+		camera_->SetEye(XMFLOAT3{ player->GetPosition1().x + cameraPosition.x + 20,player->GetPosition1().y + cameraPosition.y + 5.0f, player->GetPosition1().z + cameraPosition.z });
 		camera_->Update();
 	}
 	
@@ -266,7 +266,7 @@ void GameScene::GameUpdate()
 		camera_->Update();
 		for (std::unique_ptr<Enemy>& object1 : enemyObjects)
 		{
-			object1->Update(cameraPosition);
+			object1->Update(cameraPosition, cameraPosition);
 		}
 	}
 	if (cameraPosition.x <= end.x) {
@@ -279,7 +279,6 @@ void GameScene::GameUpdate()
 	}
 	if (input_->TriggerKey(DIK_0)) {
 		player->IsDead();
-
 	}
 }
 
@@ -405,33 +404,33 @@ void (GameScene::* GameScene::SceneDraw_[])() =
 	&GameScene::GameDraw,
 };
 void GameScene::Collisions() {
-	/*for (std::unique_ptr<Enemy>& object1 : enemyObjects)
-		if (object1->GetPosition0().x - player->GetFinalPos().x < 1 &&
-			-1 < object1->GetPosition0().x - player->GetFinalPos().x) {
-			if (object1->GetPosition0().y - player->GetFinalPos().y < 1 &&
-				-1 < object1->GetPosition0().y - player->GetFinalPos().y) {
-				if (object1->GetPosition0().z - player->GetFinalPos().z < 1 &&
-					-1 < object1->GetPosition0().z - player->GetFinalPos().z) {
-					player->IsDead();
-				}
-			}
-		}*/
+	//for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+	//	if (object1->GetPosition0().x - player->GetFinalPos().x < 1 &&
+	//		-1 < object1->GetPosition0().x - player->GetFinalPos().x) {
+	//		if (object1->GetPosition0().y - player->GetFinalPos().y < 2 &&
+	//			-2 < object1->GetPosition0().y - player->GetFinalPos().y) {
+	//			if (object1->GetPosition0().z - player->GetFinalPos().z < 2 &&
+	//				-2 < object1->GetPosition0().z - player->GetFinalPos().z) {
+	//				player->IsDead();
+	//			}
+	//		}
+	//	}
 
-	/*for (std::unique_ptr<Enemy>& object1 : enemyObjects)
-		if (object1->GetBulletPos().x - player->GetFinalPos().x < 2 &&
-			-2 < object1->GetBulletPos().x - player->GetFinalPos().x) {
-			if (object1->GetBulletPos().y - player->GetFinalPos().y < 2 &&
-				-2 < object1->GetBulletPos().y - player->GetFinalPos().y) {
-				if (object1->GetBulletPos().z - player->GetFinalPos().z < 2 &&
-					-2 < object1->GetBulletPos().z - player->GetFinalPos().z) {
-					player->IsDead();
-				}
-			}
-		}*/
+	//for (std::unique_ptr<Enemy>& object1 : enemyObjects)
+	//	if (object1->GetBulletPos().x - player->GetFinalPos().x < 1 &&
+	//		-1 < object1->GetBulletPos().x - player->GetFinalPos().x) {
+	//		if (object1->GetBulletPos().y - player->GetFinalPos().y < 2 &&
+	//			-2 < object1->GetBulletPos().y - player->GetFinalPos().y) {
+	//			if (object1->GetBulletPos().z - player->GetFinalPos().z < 2 &&
+	//				-2 < object1->GetBulletPos().z - player->GetFinalPos().z) {
+	//				player->IsDead();
+	//			}
+	//		}
+	//	}
 
 	for (std::unique_ptr<Enemy>& object1 : enemyObjects)
-		if (object1->GetPosition0().x - player->GetBulletPos().x < 6 &&
-			-6 < object1->GetPosition0().x - player->GetBulletPos().x) {
+		if (object1->GetPosition0().x - player->GetBulletPos().x < 1 &&
+			-1 < object1->GetPosition0().x - player->GetBulletPos().x) {
 			if (object1->GetPosition0().y - player->GetBulletPos().y < 6 &&
 				-6 < object1->GetPosition0().y - player->GetBulletPos().y) {
 				if (object1->GetPosition0().z - player->GetBulletPos().z < 3 &&
@@ -444,8 +443,8 @@ void GameScene::Collisions() {
 		}
 
 	for (std::unique_ptr<Enemy>& object1 : enemyObjects)
-		if (object1->GetBulletPos().x - player->GetBulletPos().x < 5 &&
-			-5 < object1->GetBulletPos().x - player->GetBulletPos().x) {
+		if (object1->GetBulletPos().x - player->GetBulletPos().x < 1 &&
+			-1 < object1->GetBulletPos().x - player->GetBulletPos().x) {
 			if (object1->GetBulletPos().y - player->GetBulletPos().y < 5 &&
 				-5 < object1->GetBulletPos().y - player->GetBulletPos().y) {
 				if (object1->GetBulletPos().z - player->GetBulletPos().z < 5 &&

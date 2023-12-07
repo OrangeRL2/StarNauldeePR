@@ -10,6 +10,13 @@
 #include "SimpleMath.h"
 #include "MathFunc.h"
 #include "SpritePop.h"
+
+/**
+ * @file TitleManager.h
+ * @brief Class for setting up title screen
+ * @author Nauldee Nawill
+ */
+
 enum TitleMenu
 {
 	start,

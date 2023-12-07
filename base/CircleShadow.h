@@ -2,6 +2,12 @@
 #pragma warning(disable:4828) 
 #include "DirectXMath.h"
 
+/**
+ * @file CircleShadow.h
+ * @brief Class for player shadow
+ * @author Nauldee Nawill
+ */
+
 //影
 class CircleShadow
 {
