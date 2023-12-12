@@ -30,13 +30,10 @@ public:
 	//Player Movement Functions
 	void PlayerMove();
 	void TitleUpdate();
-	void CameraFollow();
-	void Rotate(XMFLOAT3 targetPos);
 	void PlayerRotate();
 
 	//Bullet
 	void ShotStraightBullet();
-	float Deg2Rad(float targetPos);
 
 	//Setters
 	static void SetDevice(ID3D12Device* device) { Player::device = device; }
@@ -87,22 +84,28 @@ private:
 	FbxObject3D* object1 = nullptr;
 
 	PlayerBullet* playerBullet;
-	//movement
+	//Movement
+	//0=object0,1=object1,etc
 	DirectX::XMFLOAT3 position0 = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 position1 = { 0.0f,0.5f,0.0f };
 
 	DirectX::XMFLOAT3 velocity0 = { 0.2f,0.2f,0.2f };
 	DirectX::XMFLOAT3 velocity1 = { 0.2f,0.2f,0.2f };
+
 	DirectX::XMFLOAT3 finalPos = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 finalPos1 = { 0.0f,0.5f,0.0f };
+
 	DirectX::XMFLOAT3 cameraPos0 = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 centerpos = { 0.0f,0.5f,0.0f };
+
 	DirectX::XMFLOAT3 rotation0 = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 finalRotation = { 0.0f,0.0f,0.0f };
+
 	DirectX::XMFLOAT3 scale0 = { 0.01f,0.01f,0.01f };
 
-	const float verticalLimit = 21.0f;
-	const float horizontalLimit = 20.0f;
+	//Movement limiters
+	const float verticalLimit = 25.0f;
+	const float horizontalLimit = 25.0f;
 	const float xRotationChange = 0.1f;
 	const float zRotationChange = 0.05f;
 
@@ -113,11 +116,11 @@ private:
 	const XMFLOAT3* parent_ = nullptr;
 
 	float rotation = 120;
-	//easing
+	//Easing
 	float minFrame = 0.0f;
 	float frame = 0.0f;
 	float maxFrame = 6.20f;
-	int rotateFlag;
+	bool rotateFlag = false;
 
 	float distanceTime = 60.0f;
 
@@ -125,20 +128,25 @@ private:
 
 	bool isDead = false;
 
-	//player speed
+	//Player speed
 	float speed = 0.5f;
+	float verticalRotSpeed = 0.05f;
+	float horizontalRotSpeed = 0.1f;
+	const float verticalRotLimit = 0.5f;
+	const float rotSpeed = 0.02f;
+	const float standardRot = 0.0f;
 
-	//bullet related
+	//Bullet related
 	DirectX::XMFLOAT3 bulletPos = { finalPos.x,finalPos.y,finalPos.z };
 	DirectX::XMFLOAT3 bulletPos2 = { finalPos.x,finalPos.y,finalPos.z };
 
 	std::list<std::unique_ptr<PlayerBullet>> objects;
 	bool isBulletDead = false;
 
-	//reticle related
+	//Reticle related
 	FbxModel* retModel = nullptr;
 	FbxObject3D* retObject = nullptr;
 
-	DirectX::XMFLOAT3 retPos = { -20.0f,0.5f,0.0f };
+	DirectX::XMFLOAT3 retPos = { -100.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 retFinalPos = { 0.0f,0.5f,0.0f };
 };

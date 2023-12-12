@@ -20,9 +20,15 @@ void PlayerBullet::Initialize(FbxModel* model, XMFLOAT3 parent, XMFLOAT3 reticle
 	centerpos = reticle;
 
 	ReticleAim(parent, reticle);
+	model1 = model;
 }
 void PlayerBullet::Update(XMFLOAT3 reticle)
 {
+
+	particles.remove_if([](std::unique_ptr<BulletParticle>& particle) {
+		return particle->GetDeath();
+		});
+
 	Vector3 velocity;
 	velocity = { 2,0,10 };
 
@@ -40,10 +46,18 @@ void PlayerBullet::Update(XMFLOAT3 reticle)
 	player1 = player1 + direction*2;
 	XMStoreFloat3(&finalPos, player1);
 
+	for (std::unique_ptr<BulletParticle>& particle0 : particles)
+	{
+		particle0->Update();
+	}
+
 	if (finalPos.x < reticle.x)
 	{
 		SetDeath();
 	}
+	
+		ParticleSpawn();
+	
 	object0->SetPosition(finalPos);
 	object0->SetScale({ scale0 });
 	object0->SetRotation({ rotation0 });
@@ -58,13 +72,12 @@ void PlayerBullet::Draw(ID3D12GraphicsCommandList* cmdList)
 	if (isDead == false) {
 		object0->Draw(cmdList);
 	}
-
+	for (std::unique_ptr<BulletParticle>& particle0 : particles)
+	{
+		particle0->Draw(cmdList);
+	}
 }
 
-void PlayerBullet::BulletShot()
-{
-
-}
 void PlayerBullet::ReticleAim(XMFLOAT3 player, XMFLOAT3 reticle)
 {
 	/*const float speed = 1.0f;
@@ -88,4 +101,16 @@ void PlayerBullet::ReticleAim(XMFLOAT3 player, XMFLOAT3 reticle)
 	//player1 = player1 + direction / 1;
 	//XMStoreFloat3(&finalPos, player0);
 
+}
+
+void PlayerBullet::ParticleSpawn()
+{
+	//Initializes Particles
+	std::unique_ptr<BulletParticle>newBullet = std::make_unique<BulletParticle>();
+
+	particlePos = { finalPos.x,finalPos.y,finalPos.z };
+
+	newBullet->Initialize(model1,particlePos);
+
+	particles.push_back(std::move(newBullet));
 }

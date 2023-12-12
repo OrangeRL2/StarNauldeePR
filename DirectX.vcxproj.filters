@@ -159,6 +159,9 @@
     <ClCompile Include="Particle.cpp">
       <Filter>ソース ファイル\gameObject</Filter>
     </ClCompile>
+    <ClCompile Include="BulletParticle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\DirectXCommon.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>ヘッダー ファイル\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletParticle.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

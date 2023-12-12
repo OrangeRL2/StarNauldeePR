@@ -5,37 +5,31 @@
 #include "FbxModel.h"
 #include "FbxObject3D.h"
 #include "DirectXCommon.h"
-#include "BulletParticle.h"
 
 /**
- * @file PlayerBullet.h
- * @brief Player Bullet
+ * @file BulletParticle.h
+ * @brief Player Bullet Particles
  * @author Nauldee Nawill
  */
 
-class PlayerBullet
+class BulletParticle
 {
 public:
 	//functions
-	PlayerBullet() {};
-	~PlayerBullet() {};
+	BulletParticle() {};
+	~BulletParticle() {};
 
-	void Initialize(FbxModel* model, XMFLOAT3 parent,XMFLOAT3 reticlePos);
+	void Initialize(FbxModel* model, XMFLOAT3 parent);
 
-	void Update(XMFLOAT3 reticle);
+	void Update();
 
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
-	void BulletShot();
-	
-	void ReticleAim(XMFLOAT3 player, XMFLOAT3 enemy);
 
-	void ParticleSpawn();
-
-	static void SetDevice(ID3D12Device* device) { PlayerBullet::device = device; }
-	static void SetCamera(Camera* camera) { PlayerBullet::camera = camera; }
-	static void SetInput(Input* input) { PlayerBullet::input = input; }
-	static void SetDXInput(DXInput* dxInput) { PlayerBullet::dxInput = dxInput; }
+	static void SetDevice(ID3D12Device* device) { BulletParticle::device = device; }
+	static void SetCamera(Camera* camera) { BulletParticle::camera = camera; }
+	static void SetInput(Input* input) { BulletParticle::input = input; }
+	static void SetDXInput(DXInput* dxInput) { BulletParticle::dxInput = dxInput; }
 	void SetParent3d(XMFLOAT3* parent) { this->parent_ = parent; }
 	//sets player translation
 	void SetPosition0(DirectX::XMFLOAT3 pos) { position1 = pos; }
@@ -43,7 +37,7 @@ public:
 	void SetRotation0(DirectX::XMFLOAT3 rot) { rotation0 = rot; }
 	void SetScale0(DirectX::XMFLOAT3 sca) { scale0 = sca; }
 	bool SetDeath() { return isDead = true; }
-	
+
 	//gets player translations
 	DirectX::XMFLOAT3 GetPosition0() { return position0; }
 	DirectX::XMFLOAT3 GetPosition1() { return position1; }
@@ -71,8 +65,7 @@ private:
 	DirectX::XMFLOAT3 cameraPos0 = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 centerpos = { 0.0f,0.5f,0.0f };
 	DirectX::XMFLOAT3 rotation0 = { 0.0f,0.0f,0.0f };
-	DirectX::XMFLOAT3 scale0 = { 0.011f,0.011f,0.011f };
-	DirectX::XMFLOAT3 particlePos = { 0.01f,0.01f,0.01f };
+	DirectX::XMFLOAT3 scale0 = { 0.02f,0.01f,0.01f };
 
 	XMVECTOR posA = { 0.01f,0.01f,0.01f };
 	XMVECTOR posB = { 0.01f,0.01f,0.01f };
@@ -88,8 +81,6 @@ private:
 
 	const XMFLOAT3* parent_ = nullptr;
 	DirectXCommon* dxCommon_ = nullptr;
-
-	std::list<std::unique_ptr<BulletParticle>> particles;
 public:
 
 	//fbx
