@@ -47,9 +47,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("rumbaDancing", "Resources/white1x1.png"));
 	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("boneTest", "Resources/white1x1.png"));
-	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("fbxTest", "Resources/Corneria/GrdCorneriaBuilde1.png"));
+	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("fbxTest", "Resources/Corneria/GrdCorneriaWall4asp.png"));
 	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("fbxObjectTest", "Resources/Corneria/GrdCorneriaWall4asp.png"));
-	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("ground", "Resources/Corneria/GrdCorneriaGcst2.png"));
+	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("ground", "Resources/Corneria/GrdCorneriaWall4asp.png"));
 	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("skybox", "Resources/skybox/clouds.jpg"));
 	models.emplace_back(FbxLoader::GetInstance()->LoadModelFromFile("stone", "Resources/white1x1.png"));
 #pragma endregion
@@ -102,7 +102,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 #pragma region Level Loader
 	//Level Editor
 	jsonLoader = new JsonLoader();
-	jsonLoader->LoadFile("Resources/levels/test12.json");
+	jsonLoader->LoadFile("Resources/levels/test13.json");
 	for (int i = 0; i < jsonLoader->GetObjectDatas(); i++)
 	{
 		std::unique_ptr<FbxObject3D>newObject = std::make_unique<FbxObject3D>();
